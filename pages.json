@@ -1,0 +1,73 @@
+{
+	"pages": [{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarBackgroundColor": "#c00000",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/my/my"
+		}, {
+			"style": {
+				"navigationBarTitleText": "#c00000",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"tabBar": {
+		"selectedColor": "#c00000",
+		"list": [{
+			"pagePath": "pages/home/home",
+			"text": "首页",
+			"iconPath": "static/tab_icons/home.png",
+			"selectedIconPath": "static/tab_icons/home-active.png"
+		}, {
+			"pagePath": "pages/my/my",
+			"text": "我的",
+			"iconPath": "static/tab_icons/my.png",
+			"selectedIconPath": "static/tab_icons/my-active.png"
+		}]
+	},
+	//分包
+	"subPackages": [{
+		"root": "subpkg",
+		"pages": [{
+				"path": "kd/kd",
+				"style": {
+					"onReachBottomDistance": 150,
+					"enablePullDownRefresh": true,
+					"backgroundColor": "#f8f8f8"
+				}
+			},
+			{
+				"path": "nc/nc"
+			}, {
+				"path": "jx/jx",
+				"style": {
+
+				}
+
+			}, {
+				"path": "jz/jz",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}
+		]
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "#fff",
+		"navigationBarTitleText": "严选便利店",
+		"navigationBarBackgroundColor": "#c00000",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"background": "#efeff4"
+		}
+	}
+}
