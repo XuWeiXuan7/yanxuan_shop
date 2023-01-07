@@ -1,9 +1,11 @@
 // #ifndef VUE3
 import Vue from 'vue'
 import App from './App'
-
+import store from '@/store/index.js'
 Vue.config.productionTip = false
 import { $http } from '@escook/request-miniprogram'
+uni.$http = $http
+$http.baseUrl = 'http://192.168.0.103'
 App.mpType = 'app'
 $http.beforeRequest = function(options) {
 	uni.showLoading({
@@ -32,7 +34,8 @@ uni.$showMsg = function(title = '数据请求失败！', duration = 1500) {
 	})
 }
 const app = new Vue({
-	...App
+	...App,
+	store
 })
 app.$mount()
 // #endif

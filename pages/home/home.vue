@@ -99,9 +99,10 @@
 					font-size: 14px;
 					font-weight: bold;
 
-
+					&:hover {
+						background-color: #ccc;
+					}
 				}
-
 
 			}
 
@@ -140,6 +141,7 @@
 					}
 
 					.maodian-content-title {
+						width: 100%;
 						position: relative;
 						padding-top: 10px;
 						padding-left: 10px;
@@ -467,212 +469,65 @@
 			<view class="maodian">
 				<view class="maodian-left">
 					<scroll-view scroll-y="true" style="height: 100%;">
-						<view v-for="(item,index) in tabjson" :key="index" @click="toAnchor(index+1)"
-							:class='{tabColor:bools["bool"+(index+1)]}'>
-							{{item}}
+						<view v-for="(item,index) in home.homeTab" :key="index" @click="toAnchor(index)"
+							:class='{tabColor:bools["bool"+(index+1)]}' id="tabColor">
+							{{item.tabName}}
 						</view>
 					</scroll-view>
 				</view>
 				<view class="maodian-right">
 					<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
-						scroll-with-animation="true" @scroll="huadong">
-						<view class="maodian-zt">
-							<view class="maodian-title" id="anchor1">推荐</view>
-							<view class="maodian-content">
+						scroll-with-animation="true">
+						<view class="maodian-zt" v-for="(item,index) of home.homeInfo" :key="index">
+							<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
+							<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
 								<view class="maodian-list">
 									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
+										<img :src="item1.img" alt="">
 									</view>
 								</view>
 								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
+									<view class="title1">{{item1.title}}</view>
+									<text class="title2">销量 : {{item1.sell}}</text>
 									<view class="addcut">
 										<view class="money">
-											￥5.50
+											￥{{item1.price}}
 										</view>
 										<view class="addcut1">
-											<view class="cut">-</view>
-											<text class="addcut-num">1</text>
-											<view class="add">+</view>
+											<view class="cut" @click="jian(index,index1,item1)">
+												-
+											</view>
+											<text
+												class="addcut-num">{{shop_num['num'+index.toString()+index1.toString()]}}</text>
+											<view class="add" @click="jia(index,index1,item1)">+
+											</view>
 										</view>
 									</view>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-								</view>
-							</view>
-						</view>
-						<view class="maodian-zt">
-
-							<view class="maodian-title" id="anchor2">小零食</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-									<view class="addcut">
-										<view class="money">
-											￥5.50
-										</view>
-										<view class="addcut1">
-											<view class="cut">-</view>
-											<text class="addcut-num">1</text>
-											<view class="add">+</view>
-										</view>
-									</view>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-								</view>
-							</view>
-						</view>
-						<view class="maodian-zt">
-							<view class="maodian-title" id="anchor3">泡面</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-									<view class="addcut">
-										<view class="money">
-											￥5.50
-										</view>
-										<view class="addcut1">
-											<view class="cut">-</view>
-											<text class="addcut-num">1</text>
-											<view class="add">+</view>
-										</view>
-									</view>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
-
-								</view>
-							</view>
-							<view class="maodian-content">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img src="./image/泡面1.jpg" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">康师傅爆椒牛肉面</view>
-									<text class="title2">销量 : 30</text>
 								</view>
 							</view>
 						</view>
 					</scroll-view>
 				</view>
 			</view>
-			<view class="jiesuan">
+			<view class=" jiesuan">
 				<view class="jiesuan-zt">
 					<view class="jiesuan-icon">
 						<view class="icon-zt">
 							<uni-icons type="cart" size="24" color="#fff" class="icon1" @click="trigger"></uni-icons>
-							<text class="icon-text1" @click="trigger">11</text>
+							<text class="icon-text1" @click="trigger">{{cart_num}}</text>
 						</view>
-						<text class="icon-text2">￥10.00</text>
+						<text class="icon-text2">￥{{total_price}}</text>
 					</view>
 					<view class="jiesuan-button">
 						<button type="default" class="jiesuan-btn" @click="jiesuan">去结算</button>
 					</view>
 					<view class="share">
-						<view :class="{' box':share}" @click="display"></view>
+						<view :class="{'box':share}" @click="display"></view>
 						<view class="share-item" :class="{'show':share}">
 							<view class="spOne">
 								<view class="spOne-text">
 									商品数量：
-									<text>1</text>
+									<text>{{cart_num}}</text>
 								</view>
 								<text>清空</text>
 							</view>
@@ -686,9 +541,9 @@
 								</view>
 								<view class="addcut">
 									<view class="addcut1">
-										<view class="cut">-</view>
-										<text class="addcut-num">1</text>
-										<view class="add">+</view>
+										<view class="cut" @click="jian(index,index1,item1.price)">-</view>
+										<text class="addcut-num">0</text>
+										<view class="add" @click="jia(index,index1,item1.price)">+</view>
 									</view>
 								</view>
 							</view>
@@ -703,70 +558,117 @@
 	</view>
 </template>
 <script>
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
+				//锚点观看
 				toView: '',
+				//弹出层样式
 				share: false,
+				//商品个数
 				cart_num: 0,
+				//弹出层取余
 				btn_num: 0,
+				//样式
 				bools: {},
-				tabjson: ['推荐', '小零食', '泡面', '酒水', '辣条', '饮料', '自热锅']
+				//商品数据
+				home: {
+					homeInfo: [],
+					homeTab: []
+				},
+				shop_num: {},
+				total_price: 0
 			}
 		},
-		mounted() {
+
+		async onLoad() {
 			//获取tab的数量
-			let tabnum = this.tabjson.length;
-			for (let i = 0; i < tabnum; i++) {
-				this.$set(this.bools, `bool${i+1}`, false)
-			}
-			this.huadong()
+			// this.huadong()
+			await this.getHomeInfo()
+			await this.getHomeTab()
+			let tabnum = this.home.homeTab.length
+			console.log(tabnum);
+			//改变tab样式
+			// for (let i = 0; i < tabnum; i++) {
+			// 	this.$set(this.bools, `bool${i+1}`, false)
+			// }
+
+			this.home.homeInfo.forEach((item, index) => {
+				for (let i = 0; i < item.length; i++) {
+					this.$set(this.shop_num, `num${index+i.toString()}`, 0)
+				}
+			})
 		},
+		computed: {},
 		methods: {
+			...mapMutations('m_home', ['addToCart']),
+			//加商品
+			jia(index, index1, item) {
+				this.shop_num['num' + index.toString() + index1.toString()]++
+				this.total_price += item.price
+				this.cart_num++
+				if (!item.num) {
+					item.num = 1
+				}
+				this.addToCart(item)
+			},
+			jian(index, index1, price) {
+				if (this.shop_num['num' + index.toString() + index1.toString()] <= 0) {
+					this.shop_num['num' + index.toString() + index1.toString()] = 0
+				} else {
+					this.shop_num['num' + index.toString() + index1.toString()]--
+					this.cart_num <= 0 ? 0 : this.cart_num--
+					this.total_price -= item.price
+				}
+			},
+
 			toAnchor(id) {
 				let anchorId = 'anchor' + id
 				this.toView = ''
 				this.$nextTick(() => {
 					this.toView = anchorId;
 				})
-				Object.keys(this.bools).forEach((key) => {
-					this.bools[key] = false
-					this.bools[id] = true
-				})
+				// Object.keys(this.bools).forEach((key) => {
+				// 	this.bools[key] = false
+				// 	this.bools[id] = true
+				// })
 			},
 			//滑动改变左侧导航栏样式
-			huadong(e) {
-				let maodian1 = uni.createSelectorQuery().in(this).selectAll('.maodian-zt');
-				let top;
-				let that = this
-				maodian1.boundingClientRect(function(data) {
-					let hg = {}
-					let bt1 = data[0].bottom + 170
-					data.forEach((key, index) => {
-						hg['number' + index] = key.height
-					})
-					let hgtotal = hg.number1 + hg.number2
-					console.log(hgtotal);
-					switch (true) {
-						case bt1 >= hg.number1:
-							that.bools.bool1 = true
-							that.bools.bool2 = false
-							that.bools.bool3 = false
-							break;
-						case 2 <= bt1 && (hgtotal - hg.number1 > bt1):
-							that.bools.bool1 = false
-							that.bools.bool2 = true
-							that.bools.bool3 = false
-							break;
-						default: {
-							that.bools.bool1 = false
-							that.bools.bool2 = false
-							that.bools.bool3 = true
-						}
+			// huadong(e) {
+			// 	let maodian1 = uni.createSelectorQuery().in(this).selectAll('.maodian-zt');
+			// 	let top;
+			// 	let that = this
+			// 	maodian1.boundingClientRect(function(data) {
+			// 		let hg = {}
+			// 		let bt1 = data[0].bottom + 26
+			// 		console.log(bt1);
+			// 		data.forEach((key, index) => {
+			// 			hg['number' + index] = key.height
+			// 		})
+			// 		console.log(hg);
+			// 		let hgtotal = hg.number1 + hg.number2
+			// 		// console.log(hgtotal);
+			// 		switch (true) {
+			// 			case bt1 >= hg.number1:
+			// 				that.bools.bool1 = true
+			// 				that.bools.bool2 = false
+			// 				that.bools.bool3 = false
+			// 				break;
+			// 			case 2 <= bt1 && (hgtotal - hg.number1 > bt1):
+			// 				that.bools.bool1 = false
+			// 				that.bools.bool2 = true
+			// 				that.bools.bool3 = false
+			// 				break;
+			// 			default: {
+			// 				that.bools.bool1 = false
+			// 				that.bools.bool2 = false
+			// 				that.bools.bool3 = true
+			// 			}
 
-					}
-				}).exec(function(res) {})
-			},
+			// 		}
+			// 	}).exec(function(res) {})
+			// },
 			//获取模块高度
 			mk_gd() {
 
@@ -787,7 +689,8 @@
 				let fk = await uni.showModal({
 					title: '是否付款'
 				})
-				if (fk) {
+				console.log(fk);
+				if (fk[1].confirm) {
 					uni.showLoading({
 						title: '数据加载中'
 					})
@@ -795,7 +698,21 @@
 						uni.hideLoading();
 						uni.$showMsg('付款成功', 1500)
 					}, 2000);
+				} else {
+					uni.$showMsg('付款失败', 1500)
 				}
+			},
+			//获取商品数据
+			async getHomeInfo() {
+				const { data: res } = await uni.$http.post('/api/home')
+				console.log(res);
+				this.home.homeInfo = res.status
+			},
+			//获取导航栏信息
+			async getHomeTab() {
+				const { data: res } = await uni.$http.post('/api/homeTab')
+				console.log(res);
+				this.home.homeTab = res.status
 			}
 		}
 	}

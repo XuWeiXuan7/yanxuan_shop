@@ -10,10 +10,9 @@
 			}
 		},
 		{
-			"path": "pages/my/my"
-		}, {
+			"path": "pages/my/my",
 			"style": {
-				"navigationBarTitleText": "#c00000",
+				"navigationBarTitleText": "严选便利店",
 				"enablePullDownRefresh": false
 			}
 		}
@@ -45,7 +44,8 @@
 			},
 			{
 				"path": "nc/nc"
-			}, {
+			},
+			{
 				"path": "jx/jx",
 				"style": {
 
