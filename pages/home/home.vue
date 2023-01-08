@@ -290,6 +290,17 @@
 						color: #fff;
 						font-size: 20rpx
 					}
+
+					.jiesuan-err {
+						display: flex;
+						border-radius: 0 50px 50px 0;
+						align-items: center;
+						justify-content: center;
+						height: 100%;
+						background-color: #7C7C7C !important;
+						color: #fff;
+						font-size: 20rpx
+					}
 				}
 
 				.share {
@@ -314,6 +325,9 @@
 
 				// 进入分享动画
 				.show {
+					position: relative;
+					bottom: 0vh;
+					max-height: 70%;
 					margin-bottom: 85rpx;
 					transition: all 0.3s ease;
 					transform: translateY(0%) !important;
@@ -324,7 +338,6 @@
 					box-sizing: border-box;
 					position: fixed;
 					left: 0;
-					bottom: 0;
 					width: 100%;
 					background-color: #FFFFFF;
 					transition: all 0.3s ease;
@@ -351,33 +364,41 @@
 
 					.sp-cont {
 						display: flex;
+						flex-direction: column;
 						position: relative;
 
-						.sp-imgt {
-							display: flex;
-							width: 80%;
-							margin-bottom: 40rpx;
+						.goshop_tchu {
+							position: relative;
 
-							img {
-								width: 150rpx;
-								height: 150rpx;
-							}
 
-							.sp-img-text {
+
+							.sp-imgt {
 								display: flex;
-								flex-direction: column;
-								justify-content: space-between;
+								width: 80%;
+								margin-bottom: 40rpx;
 
-								text {
-									font-weight: bold;
+								img {
+									width: 150rpx;
+									height: 150rpx;
 								}
 
-								.title2 {
-									color: red;
+								.sp-img-text {
+									display: flex;
+									flex-direction: column;
+									justify-content: space-between;
+
+									text {
+										font-weight: bold;
+									}
+
+									.title2 {
+										color: red;
+									}
 								}
+
 							}
-
 						}
+
 
 						.addcut {
 							width: 20%;
@@ -477,7 +498,7 @@
 				</view>
 				<view class="maodian-right">
 					<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
-						scroll-with-animation="true">
+						scroll-with-animation="true" scroll-top="100px">
 						<view class="maodian-zt" v-for="(item,index) of home.homeInfo" :key="index">
 							<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
 							<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
@@ -494,12 +515,11 @@
 											￥{{item1.price}}
 										</view>
 										<view class="addcut1">
-											<view class="cut" @click="jian(index,index1,item1)">
+											<view class="cut" @click="jian(item1)">
 												-
 											</view>
-											<text
-												class="addcut-num">{{shop_num['num'+index.toString()+index1.toString()]}}</text>
-											<view class="add" @click="jia(index,index1,item1)">+
+											<text class="addcut-num">{{item1.num}}</text>
+											<view class="add" @click="jia(item1)">+
 											</view>
 										</view>
 									</view>
@@ -509,7 +529,7 @@
 					</scroll-view>
 				</view>
 			</view>
-			<view class=" jiesuan">
+			<view class="jiesuan">
 				<view class="jiesuan-zt">
 					<view class="jiesuan-icon">
 						<view class="icon-zt">
@@ -519,37 +539,106 @@
 						<text class="icon-text2">￥{{total_price}}</text>
 					</view>
 					<view class="jiesuan-button">
-						<button type="default" class="jiesuan-btn" @click="jiesuan">去结算</button>
+						<button type="default" :class="{'jiesuan-btn':true,'jiesuan-err':btnerr}" @click="jiesuan"
+							:disabled="btnerr">去结算</button>
 					</view>
 					<view class="share">
 						<view :class="{'box':share}" @click="display"></view>
 						<view class="share-item" :class="{'show':share}">
-							<view class="spOne">
-								<view class="spOne-text">
-									商品数量：
-									<text>{{cart_num}}</text>
+							<scroll-view scroll-y="true" style="max-height: 70vh;">
+								<view class="spOne">
+									<view class="spOne-text">
+										商品数量：
+										<text>{{cart_num}}</text>
+									</view>
+									<text @click="removeStorage">清空</text>
 								</view>
-								<text>清空</text>
-							</view>
-							<view class="sp-cont" v-if="cart_num">
-								<view class="sp-imgt">
-									<img src="./image/酒水1.jpg" alt="">
-									<view class="sp-img-text">
-										<text class="title1">500ml听装雪花</text>
-										<text class="title2">￥5.00</text>
+								<view class="sp-cont" v-if="cart_num">
+									<view class="goshop_tchu">
+										<view class="sp-imgt">
+											<img src="./image/酒水1.jpg" alt="">
+											<view class="sp-img-text">
+												<text class="title1">500ml听装雪花</text>
+												<text class="title2">￥5.00</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item1)">-</view>
+												<text class="addcut-num">0</text>
+												<view class="add" @click="jia(item1)">+</view>
+											</view>
+										</view>
+									</view>
+									<view class="goshop_tchu">
+										<view class="sp-imgt">
+											<img src="./image/酒水1.jpg" alt="">
+											<view class="sp-img-text">
+												<text class="title1">500ml听装雪花</text>
+												<text class="title2">￥5.00</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item1)">-</view>
+												<text class="addcut-num">0</text>
+												<view class="add" @click="jia(item1)">+</view>
+											</view>
+										</view>
+									</view>
+									<view class="goshop_tchu">
+										<view class="sp-imgt">
+											<img src="./image/酒水1.jpg" alt="">
+											<view class="sp-img-text">
+												<text class="title1">500ml听装雪花</text>
+												<text class="title2">￥5.00</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item1)">-</view>
+												<text class="addcut-num">0</text>
+												<view class="add" @click="jia(item1)">+</view>
+											</view>
+										</view>
+									</view>
+									<view class="goshop_tchu">
+										<view class="sp-imgt">
+											<img src="./image/酒水1.jpg" alt="">
+											<view class="sp-img-text">
+												<text class="title1">500ml听装雪花</text>
+												<text class="title2">￥5.00</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item1)">-</view>
+												<text class="addcut-num">0</text>
+												<view class="add" @click="jia(item1)">+</view>
+											</view>
+										</view>
+									</view>
+									<view class="goshop_tchu">
+										<view class="sp-imgt">
+											<img src="./image/酒水1.jpg" alt="">
+											<view class="sp-img-text">
+												<text class="title1">500ml听装雪花</text>
+												<text class="title2">￥5.00</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item1)">-</view>
+												<text class="addcut-num">0</text>
+												<view class="add" @click="jia(item1)">+</view>
+											</view>
+										</view>
 									</view>
 								</view>
-								<view class="addcut">
-									<view class="addcut1">
-										<view class="cut" @click="jian(index,index1,item1.price)">-</view>
-										<text class="addcut-num">0</text>
-										<view class="add" @click="jia(index,index1,item1.price)">+</view>
-									</view>
+								<view class="sp-cont" v-else>
+									<text>无商品</text>
 								</view>
-							</view>
-							<view class="sp-cont" v-else>
-								<text>无商品</text>
-							</view>
+							</scroll-view>
 						</view>
 					</view>
 				</view>
@@ -565,7 +654,7 @@
 				//锚点观看
 				toView: '',
 				//弹出层样式
-				share: false,
+				share: true,
 				//商品个数
 				cart_num: 0,
 				//弹出层取余
@@ -577,8 +666,9 @@
 					homeInfo: [],
 					homeTab: []
 				},
-				shop_num: {},
-				total_price: 0
+				total_price: 0,
+				//结算
+				btnerr: true
 			}
 		},
 
@@ -588,90 +678,74 @@
 			await this.getHomeInfo()
 			await this.getHomeTab()
 			let tabnum = this.home.homeTab.length
-			console.log(tabnum);
-			//改变tab样式
-			// for (let i = 0; i < tabnum; i++) {
-			// 	this.$set(this.bools, `bool${i+1}`, false)
-			// }
-
 			this.home.homeInfo.forEach((item, index) => {
 				for (let i = 0; i < item.length; i++) {
-					this.$set(this.shop_num, `num${index+i.toString()}`, 0)
+					this.$set(item[i], 'num', 0)
 				}
 			})
+			//太难受了终于弄好了。本地存储商品
+			if (uni.getStorageSync('shop_list')) {
+				var res
+				this.home.homeInfo.map((item, index) => {
+					let len = JSON.parse(uni.getStorageSync('shop_list'))
+					item.forEach((item1, index1) => {
+						res = len.filter(it => {
+							return it.id === item1.id
+						})
+						if (res.length > 0) {
+							item[index1].num = res[0].num
+						}
+						this.cart_num += item[index1].num
+						this.total_price += item[index1].num * item[index1].price
+					})
+
+				})
+			}
+		},
+		watch: {
+			total_price: function() {
+				if (this.total_price > 5) {
+					this.btnerr = false
+				} else {
+					this.btnerr = true
+				}
+			}
 		},
 		computed: {},
 		methods: {
-			...mapMutations('m_home', ['addToCart']),
-			//加商品
-			jia(index, index1, item) {
-				this.shop_num['num' + index.toString() + index1.toString()]++
+			...mapMutations('m_home', ['addToCart', 'jianToCart']),
+			async jia(item) {
 				this.total_price += item.price
 				this.cart_num++
-				if (!item.num) {
-					item.num = 1
-				}
+				item.num++
 				this.addToCart(item)
 			},
-			jian(index, index1, price) {
-				if (this.shop_num['num' + index.toString() + index1.toString()] <= 0) {
-					this.shop_num['num' + index.toString() + index1.toString()] = 0
+			removeStorage() {
+				uni.removeStorageSync('shop_list')
+				this.home.homeInfo.forEach((item, index) => {
+					for (let i = 0; i < item.length; i++) {
+						this.$set(item[i], 'num', 0)
+					}
+				})
+				this.total_price = 0
+				this.cart_num = 0
+			},
+			jian(item) {
+				item.num--
+				if (item.num < 0) {
+					item.num = 0
 				} else {
-					this.shop_num['num' + index.toString() + index1.toString()]--
-					this.cart_num <= 0 ? 0 : this.cart_num--
 					this.total_price -= item.price
+					this.jianToCart(item)
+					this.cart_num--
 				}
 			},
-
 			toAnchor(id) {
 				let anchorId = 'anchor' + id
 				this.toView = ''
 				this.$nextTick(() => {
 					this.toView = anchorId;
 				})
-				// Object.keys(this.bools).forEach((key) => {
-				// 	this.bools[key] = false
-				// 	this.bools[id] = true
-				// })
-			},
-			//滑动改变左侧导航栏样式
-			// huadong(e) {
-			// 	let maodian1 = uni.createSelectorQuery().in(this).selectAll('.maodian-zt');
-			// 	let top;
-			// 	let that = this
-			// 	maodian1.boundingClientRect(function(data) {
-			// 		let hg = {}
-			// 		let bt1 = data[0].bottom + 26
-			// 		console.log(bt1);
-			// 		data.forEach((key, index) => {
-			// 			hg['number' + index] = key.height
-			// 		})
-			// 		console.log(hg);
-			// 		let hgtotal = hg.number1 + hg.number2
-			// 		// console.log(hgtotal);
-			// 		switch (true) {
-			// 			case bt1 >= hg.number1:
-			// 				that.bools.bool1 = true
-			// 				that.bools.bool2 = false
-			// 				that.bools.bool3 = false
-			// 				break;
-			// 			case 2 <= bt1 && (hgtotal - hg.number1 > bt1):
-			// 				that.bools.bool1 = false
-			// 				that.bools.bool2 = true
-			// 				that.bools.bool3 = false
-			// 				break;
-			// 			default: {
-			// 				that.bools.bool1 = false
-			// 				that.bools.bool2 = false
-			// 				that.bools.bool3 = true
-			// 			}
-
-			// 		}
-			// 	}).exec(function(res) {})
-			// },
-			//获取模块高度
-			mk_gd() {
-
 			},
 			trigger() {
 				this.btn_num++
