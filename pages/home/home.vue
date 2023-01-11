@@ -554,83 +554,19 @@
 									<text @click="removeStorage">清空</text>
 								</view>
 								<view class="sp-cont" v-if="cart_num">
-									<view class="goshop_tchu">
+									<view class="goshop_tchu" v-for="(item,index) of home_shop" :key="index">
 										<view class="sp-imgt">
-											<img src="./image/酒水1.jpg" alt="">
+											<img :src="item.img" alt="">
 											<view class="sp-img-text">
-												<text class="title1">500ml听装雪花</text>
-												<text class="title2">￥5.00</text>
+												<text class="title1">{{item.title}}</text>
+												<text class="title2">￥{{item.price}}</text>
 											</view>
 										</view>
 										<view class="addcut">
 											<view class="addcut1">
-												<view class="cut" @click="jian(item1)">-</view>
-												<text class="addcut-num">0</text>
-												<view class="add" @click="jia(item1)">+</view>
-											</view>
-										</view>
-									</view>
-									<view class="goshop_tchu">
-										<view class="sp-imgt">
-											<img src="./image/酒水1.jpg" alt="">
-											<view class="sp-img-text">
-												<text class="title1">500ml听装雪花</text>
-												<text class="title2">￥5.00</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item1)">-</view>
-												<text class="addcut-num">0</text>
-												<view class="add" @click="jia(item1)">+</view>
-											</view>
-										</view>
-									</view>
-									<view class="goshop_tchu">
-										<view class="sp-imgt">
-											<img src="./image/酒水1.jpg" alt="">
-											<view class="sp-img-text">
-												<text class="title1">500ml听装雪花</text>
-												<text class="title2">￥5.00</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item1)">-</view>
-												<text class="addcut-num">0</text>
-												<view class="add" @click="jia(item1)">+</view>
-											</view>
-										</view>
-									</view>
-									<view class="goshop_tchu">
-										<view class="sp-imgt">
-											<img src="./image/酒水1.jpg" alt="">
-											<view class="sp-img-text">
-												<text class="title1">500ml听装雪花</text>
-												<text class="title2">￥5.00</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item1)">-</view>
-												<text class="addcut-num">0</text>
-												<view class="add" @click="jia(item1)">+</view>
-											</view>
-										</view>
-									</view>
-									<view class="goshop_tchu">
-										<view class="sp-imgt">
-											<img src="./image/酒水1.jpg" alt="">
-											<view class="sp-img-text">
-												<text class="title1">500ml听装雪花</text>
-												<text class="title2">￥5.00</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item1)">-</view>
-												<text class="addcut-num">0</text>
-												<view class="add" @click="jia(item1)">+</view>
+												<view class="cut" @click="jian(item)">-</view>
+												<text class="addcut-num">{{item.num}}</text>
+												<view class="add" @click="jia(item)">+</view>
 											</view>
 										</view>
 									</view>
@@ -654,7 +590,7 @@
 				//锚点观看
 				toView: '',
 				//弹出层样式
-				share: true,
+				share: false,
 				//商品个数
 				cart_num: 0,
 				//弹出层取余
@@ -711,7 +647,23 @@
 				}
 			}
 		},
-		computed: {},
+		computed: {
+			home_shop: function() {
+				var home_s = []
+				var res = []
+				this.home.homeInfo.forEach(item => {
+					res = item.filter(item1 => {
+						return item1.num > 0
+					})
+					if (res)
+						res.forEach(item2 => {
+							home_s.push(item2)
+						})
+				})
+				return home_s
+
+			}
+		},
 		methods: {
 			...mapMutations('m_home', ['addToCart', 'jianToCart']),
 			async jia(item) {

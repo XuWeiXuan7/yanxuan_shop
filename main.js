@@ -5,7 +5,7 @@ import store from '@/store/index.js'
 Vue.config.productionTip = false
 import { $http } from '@escook/request-miniprogram'
 uni.$http = $http
-$http.baseUrl = 'http://192.168.0.103'
+$http.baseUrl = 'http://127.0.0.1:8080'
 App.mpType = 'app'
 $http.beforeRequest = function(options) {
 	uni.showLoading({
@@ -21,8 +21,6 @@ $http.beforeRequest = function(options) {
 		}
 	}
 }
-
-// 响应拦截器
 $http.afterRequest = function() {
 	uni.hideLoading()
 }

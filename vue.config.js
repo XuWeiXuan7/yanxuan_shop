@@ -10,5 +10,7 @@ module.exports = {
 					'dev' : 'build', process.env.UNI_PLATFORM, 'node_modules')
 			}])
 		]
-	}
+	},
+	// 关闭语法检查
+	publicPath: './',
 }
