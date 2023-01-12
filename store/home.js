@@ -18,31 +18,20 @@ export default {
 			} else {
 				state.goods[findIndex].num = goods_list.num
 			}
+			console.log(state.goods, '清空测试数据');
 			this.commit('m_home/savelocal')
 		},
 		//减商品
 		jianToCart(state, goods_list) {
-			console.log(goods_list);
-			if (goods_list.name === 'naicha_list') {
-				const findIndex = state.naicha.findIndex(x => x.title === goods_list.title)
-				state.naicha[findIndex].num = goods_list.num
-				if (state.naicha[findIndex].num == 0) {
-					let arr = state.naicha.filter(item => {
-						return item.id != goods_list.id
-					})
-					state.naicha = arr
-				}
-			} else {
-				const findIndex = state.goods.findIndex(x => x.title === goods_list.title)
-				state.goods[findIndex].num = goods_list.num
-				if (state.goods[findIndex].num == 0) {
-					let arr = state.goods.filter(item => {
-						return item.id != goods_list.id
-					})
-					state.goods = arr
-				}
+			const findIndex = state.goods.findIndex(x => x.title === goods_list.title)
+			state.goods[findIndex].num = goods_list.num
+			if (state.goods[findIndex].num == 0) {
+				let arr = state.goods.filter(item => {
+					return item.title != goods_list.title
+				})
+				state.goods = arr
 			}
-			this.commit('m_home/savelocal', goods_list.name)
+			this.commit('m_home/savelocal')
 		}
 	},
 

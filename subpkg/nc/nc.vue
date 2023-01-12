@@ -159,6 +159,33 @@
 				home_shop: []
 			}
 		},
+		onShow() {
+			console.log('进入页面');
+			var res = []
+			var num = 0
+			var price = 0
+
+			try {
+				res = JSON.parse(uni.getStorageSync('shop_list'))
+				this.home_shop = res
+				console.log(this.home_shop);
+				res.forEach(item => {
+					num += item.num
+					price += item.price * item.num
+				})
+				this.total_price = price
+				this.cart_num = num
+			} catch (e) {
+				this.home_shop = []
+				this.total_price = 0
+				this.cart_num = 0
+				this.naicha.homeInfo.forEach((item, index) => {
+					for (let i = 0; i < item.length; i++) {
+						this.$set(item[i], 'num', 0)
+					}
+				})
+			}
+		},
 		async mounted() {
 			await this.getNcInfo()
 			await this.getNcTab()
@@ -195,18 +222,20 @@
 				}
 			},
 			cart_num: function() {
-				var res = []
-				var num = 0
-				var price = 0
-				res = JSON.parse(uni.getStorageSync('shop_list'))
-				console.log(JSON.parse(uni.getStorageSync('shop_list')));
-				this.home_shop = res
-				res.forEach(item => {
-					num += item.num
-					price += item.price * item.num
-				})
-				this.total_price = price
-				this.cart_num = num
+				if (this.cart_num > 0) {
+					var res = []
+					var num = 0
+					var price = 0
+					res = JSON.parse(uni.getStorageSync('shop_list'))
+					console.log(JSON.parse(uni.getStorageSync('shop_list')));
+					this.home_shop = res
+					res.forEach(item => {
+						num += item.num
+						price += item.price * item.num
+					})
+					this.total_price = price
+					this.cart_num = num
+				}
 			}
 		},
 
@@ -244,8 +273,10 @@
 						this.$set(item[i], 'num', 0)
 					}
 				})
+				this.home_shop = []
 				this.total_price = 0
 				this.cart_num = 0
+				this.$store.state.m_home.goods = []
 			},
 			jian(item) {
 				item.num--
@@ -504,7 +535,7 @@
 		justify-content: center;
 		position: fixed;
 		width: 100%;
-		bottom: 8rpx;
+		bottom: 8vh;
 		border-radius: 50px;
 
 		.jiesuan-zt {
@@ -621,7 +652,7 @@
 				position: relative;
 				bottom: 0vh;
 				max-height: 70%;
-				margin-bottom: 85rpx;
+				margin-bottom: 200rpx;
 				transition: all 0.3s ease;
 				transform: translateY(0%) !important;
 			}
@@ -639,7 +670,7 @@
 				.spOne {
 					display: flex;
 					justify-content: space-between;
-					margin-bottom: 20rpx;
+					margin-bottom: 68rpx;
 
 					text {
 						box-sizing: border-box;

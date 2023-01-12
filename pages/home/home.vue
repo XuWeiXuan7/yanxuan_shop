@@ -159,21 +159,39 @@
 		onHide() {
 			console.log('退出页面');
 		},
+		//加入页面展示
 		onShow() {
+			console.log('进入页面');
 			var res = []
 			var num = 0
 			var price = 0
-			res = JSON.parse(uni.getStorageSync('shop_list'))
-			console.log(JSON.parse(uni.getStorageSync('shop_list')));
-			this.home_shop = res
-			res.forEach(item => {
-				num += item.num
-				price += item.price * item.num
-			})
-			this.total_price = price
-			this.cart_num = num
+
+			try {
+				res = JSON.parse(uni.getStorageSync('shop_list'))
+				this.home_shop = res
+				console.log(this.home_shop);
+				res.forEach(item => {
+					num += item.num
+					price += item.price * item.num
+				})
+				this.total_price = price
+				this.cart_num = num
+			} catch (e) {
+				this.home_shop = []
+				this.total_price = 0
+				this.cart_num = 0
+				this.home.homeInfo.forEach((item, index) => {
+					for (let i = 0; i < item.length; i++) {
+						this.$set(item[i], 'num', 0)
+					}
+				})
+			}
+
 		},
+		computed: {},
+		//监视属性
 		watch: {
+			//监视价格变化 确认付款
 			total_price: function() {
 				if (this.total_price > 5) {
 					this.btnerr = false
@@ -181,25 +199,29 @@
 					this.btnerr = true
 				}
 			},
+			//商品数量变化添加home_shop数据
 			cart_num: function() {
-				var res = []
-				var num = 0
-				var price = 0
-				res = JSON.parse(uni.getStorageSync('shop_list'))
-				console.log(JSON.parse(uni.getStorageSync('shop_list')));
-				this.home_shop = res
-				res.forEach(item => {
-					num += item.num
-					price += item.price * item.num
-				})
-				this.total_price = price
-				this.cart_num = num
+				if (this.cart_num > 0) {
+					var res = []
+					var num = 0
+					var price = 0
+					res = JSON.parse(uni.getStorageSync('shop_list')) || []
+					this.home_shop = res
+					res.forEach(item => {
+						num += item.num
+						price += item.price * item.num
+					})
+					this.total_price = price
+					this.cart_num = num
+				}
 			}
 		},
+		//挂载数据 第一次启动执行
 		async mounted() {
 			console.log('父组件');
 			await this.getHomeInfo()
 			await this.getHomeTab()
+			//给home_info添加num数量 实现响应式
 			let tabnum = this.home.homeTab.length
 			this.home.homeInfo.forEach((item, index) => {
 				for (let i = 0; i < item.length; i++) {
@@ -227,7 +249,10 @@
 			}
 		},
 		methods: {
+			//获取vuex 方法
 			...mapMutations('m_home', ['addToCart', 'jianToCart']),
+
+			//加商品
 			async jia(item) {
 				console.log(item, 'item');
 				this.total_price += item.price
@@ -235,18 +260,20 @@
 				item.num++
 				this.addToCart(item)
 			},
+			//清空
 			removeStorage() {
 				uni.removeStorageSync('shop_list')
-				uni.removeStorageSync('naicha_list')
 				this.home.homeInfo.forEach((item, index) => {
 					for (let i = 0; i < item.length; i++) {
 						this.$set(item[i], 'num', 0)
 					}
 				})
-
+				this.home_shop = []
 				this.total_price = 0
 				this.cart_num = 0
+				this.$store.state.m_home.goods = []
 			},
+			//减商品
 			jian(item) {
 				item.num--
 				if (item.num < 0) {
@@ -258,6 +285,7 @@
 					this.cart_num--
 				}
 			},
+			//锚点
 			toAnchor(id) {
 				let anchorId = 'anchor' + id
 				this.toView = ''
@@ -265,6 +293,7 @@
 					this.toView = anchorId;
 				})
 			},
+			//显示隐藏box
 			trigger() {
 				this.btn_num++
 				if (this.btn_num % 2 == 1)
@@ -273,10 +302,12 @@
 					this.share = false;
 				}
 			},
+			//隐藏box
 			display() {
 				this.btn_num++
 				this.share = false
 			},
+			//结算
 			async jiesuan() {
 				let fk = await uni.showModal({
 					title: '是否付款'
@@ -516,6 +547,7 @@
 
 		//结算
 		.jiesuan {
+
 			display: flex;
 			justify-content: center;
 			position: fixed;
