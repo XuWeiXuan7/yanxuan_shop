@@ -1,119 +1,92 @@
 <template>
-	<view class="container">
-
-		<view class="nc-tab">
-			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" class="gs" @click="onClick" />
-		</view>
-		<view class="nc-cont">
-			<view class="nc_swiper">
-				<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular
-					indicator-active-color="red" :current="0">
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/09/lun3_20230109065711A001.jpg" alt="">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/10/lun1_20230110044420A001.jpg" alt="">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/10/lun4_20230110041834A001.jpg" alt="">
-						</view>
-					</swiper-item>
-				</swiper>
+	<view>
+		<view class="maodian">
+			<view class="maodian-left">
+				<scroll-view scroll-y="true" style="height: 100%;">
+					<view v-for="(item,index) in home.homeTab" :key="index" @click="toAnchor(index)" id="tabColor">
+						{{item.tabName}}
+					</view>
+				</scroll-view>
 			</view>
-			<view class="maodian">
-				<view class="maodian-left">
-					<scroll-view scroll-y="true" style="height: 100%;">
-						<view v-for="(item,index) in naicha.homeTab" :key="index" @click="toAnchor(index)"
-							id="tabColor">
-							{{item.tabName}}
-						</view>
-					</scroll-view>
-				</view>
-				<view class="maodian-right">
-					<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
-						scroll-with-animation="true" scroll-top="100px">
-						<view class="maodian-zt" v-for="(item,index) of naicha.homeInfo" :key="index">
-							<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
-							<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img :src="item1.img" alt="">
-									</view>
+			<view class="maodian-right">
+				<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
+					scroll-with-animation="true" scroll-top="100px">
+					<view class="maodian-zt" v-for="(item,index) of home.homeInfo" :key="index">
+						<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
+						<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
+							<view class="maodian-list">
+								<view class="maodian-img">
+									<img :src="item1.img" alt="">
 								</view>
-								<view class="maodian-content-title">
-									<view class="title1">{{item1.title}}</view>
-									<text class="title2">销量 : {{item1.sell}}</text>
-									<view class="addcut">
-										<view class="money">
-											￥{{item1.price}}
+							</view>
+							<view class="maodian-content-title">
+								<view class="title1">{{item1.title}}</view>
+								<text class="title2">销量 : {{item1.sell}}</text>
+								<view class="addcut">
+									<view class="money">
+										￥{{item1.price}}
+									</view>
+									<view class="addcut1">
+										<view class="cut" @click="jian(item1)">
+											-
 										</view>
-										<view class="addcut1">
-											<view class="cut" @click="jian(item1)">
-												-
-											</view>
-											<text class="addcut-num">{{item1.num}}</text>
-											<view class="add" @click="jia(item1)">+
-											</view>
+										<text class="addcut-num">{{item1.num}}</text>
+										<view class="add" @click="jia(item1)">+
 										</view>
 									</view>
 								</view>
 							</view>
 						</view>
-					</scroll-view>
-				</view>
+					</view>
+				</scroll-view>
 			</view>
-			<view class="jiesuan">
-				<view class="jiesuan-zt">
-					<view class="jiesuan-icon">
-						<view class="icon-zt">
-							<uni-icons type="cart" size="24" color="#fff" class="icon1" @click="trigger"></uni-icons>
-							<text class="icon-text1" @click="trigger">{{cart_num}}</text>
-						</view>
-						<text class="icon-text2">￥{{total_price}}</text>
+		</view>
+		<view class="jiesuan">
+			<view class="jiesuan-zt">
+				<view class="jiesuan-icon">
+					<view class="icon-zt">
+						<uni-icons type="cart" size="24" color="#fff" class="icon1" @click="trigger"></uni-icons>
+						<text class="icon-text1" @click="trigger">{{cart_num}}</text>
 					</view>
-					<view class="jiesuan-button">
-						<button type="default" :class="{'jiesuan-btn':true,'jiesuan-err':btnerr}" @click="jiesuan"
-							:disabled="btnerr">去结算</button>
-					</view>
-					<view class="share">
-						<view :class="{'box':share}" @click="display"></view>
-						<view class="share-item" :class="{'show':share}">
-							<scroll-view scroll-y="true" style="max-height: 70vh;">
-								<view class="spOne">
-									<view class="spOne-text">
-										商品数量：
-										<text>{{cart_num}}</text>
-									</view>
-									<text @click="removeStorage">清空</text>
+					<text class="icon-text2">￥{{total_price}}</text>
+				</view>
+				<view class="jiesuan-button">
+					<button type="default" :class="{'jiesuan-btn':true,'jiesuan-err':btnerr}" @click="jiesuan"
+						:disabled="btnerr">去结算</button>
+				</view>
+				<view class="share">
+					<view :class="{'box':share}" @click="display"></view>
+					<view class="share-item" :class="{'show':share}">
+						<scroll-view scroll-y="true" style="max-height: 70vh;">
+							<view class="spOne">
+								<view class="spOne-text">
+									商品数量：
+									<text>{{cart_num}}</text>
 								</view>
-								<view class="sp-cont" v-if="cart_num">
-									<view class="goshop_tchu" v-for="(item,index) of home_shop" :key="index">
-										<view class="sp-imgt">
-											<img :src="item.img" alt="">
-											<view class="sp-img-text">
-												<text class="title1">{{item.title}}</text>
-												<text class="title2">￥{{item.price}}</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item)">-</view>
-												<text class="addcut-num">{{item.num}}</text>
-												<view class="add" @click="jia(item)">+</view>
-											</view>
+								<text @click="removeStorage">清空</text>
+							</view>
+							<view class="sp-cont" v-if="cart_num">
+								<view class="goshop_tchu" v-for="(item,index) of home_shop" :key="index">
+									<view class="sp-imgt">
+										<img :src="item.img" alt="">
+										<view class="sp-img-text">
+											<text class="title1">{{item.title}}</text>
+											<text class="title2">￥{{item.price}}</text>
 										</view>
 									</view>
+									<view class="addcut">
+										<view class="addcut1">
+											<view class="cut" @click="jian(item)">-</view>
+											<text class="addcut-num">{{item.num}}</text>
+											<view class="add" @click="jia(item)">+</view>
+										</view>
+									</view>
 								</view>
-								<view class="sp-cont" v-else>
-									<text>无商品</text>
-								</view>
-							</scroll-view>
-						</view>
+							</view>
+							<view class="sp-cont" v-else>
+								<text>无商品</text>
+							</view>
+						</scroll-view>
 					</view>
 				</view>
 			</view>
@@ -126,27 +99,11 @@
 	export default {
 		data() {
 			return {
-				options: [{
-					icon: 'shop',
-					text: '首页',
-				}, {
-					icon: 'person',
-					text: '我的',
-					infoBackgroundColor: '#007aff',
-				}],
-				indicatorDots: true,
-				autoplay: true,
-				interval: 2000,
-				duration: 500,
-				naicha: {
-					homeInfo: [],
-					homeTab: []
-				},
 				//锚点观看
 				toView: '',
 				//弹出层样式
 				share: false,
-				//商品个数 
+				//商品个数
 				cart_num: 0,
 				//弹出层取余
 				btn_num: 0,
@@ -159,22 +116,38 @@
 				home_shop: []
 			}
 		},
+		// props: ['home'],
+		// watch: {
+		// 	total_price: function() {
+		// 		if (this.total_price > 5) {
+		// 			this.btnerr = false
+		// 		} else {
+		// 			this.btnerr = true
+		// 		}
+		// 	},
+		// 	cart_num: function() {
+		// 		var res = []
+		// 		res.push(JSON.parse(uni.getStorageSync('shop_list')))
+		// 		this.home_shop = res
+		// 		console.log(res, 'res');
+		// 	}
+		// },
 		async mounted() {
-			await this.getNcInfo()
-			await this.getNcTab()
-			let tabnum = this.naicha.homeTab.length
-			this.naicha.homeInfo.forEach((item, index) => {
+			let tabnum = this.home.homeTab.length
+			this.home.homeInfo.forEach((item, index) => {
 				for (let i = 0; i < item.length; i++) {
 					this.$set(item[i], 'num', 0)
 				}
 			})
+			console.log(this.home, this.home.homeTab);
+			//太难受了终于弄好了。本地存储商品
 			if (uni.getStorageSync('shop_list')) {
 				var res
-				this.naicha.homeInfo.map((item, index) => {
+				this.home.homeInfo.map((item, index) => {
 					let len = JSON.parse(uni.getStorageSync('shop_list'))
 					item.forEach((item1, index1) => {
 						res = len.filter(it => {
-							return it.title === item1.title
+							return it.id === item1.id
 						})
 						if (res.length > 0) {
 							item[index1].num = res[0].num
@@ -185,65 +158,30 @@
 
 				})
 			}
+			this.home_shop = await JSON.parse(uni.getStorageSync('shop_list'))
+			JSON.parse(uni.getStorageSync('naicha_list')).forEach(item => {
+				this.home_shop.push(item)
+			})
+			console.log(this.home_shop, 'home_shop');
 		},
-		watch: {
-			total_price: function() {
-				if (this.total_price > 5) {
-					this.btnerr = false
-				} else {
-					this.btnerr = true
-				}
-			},
-			cart_num: function() {
-				var res = []
-				var num = 0
-				var price = 0
-				res = JSON.parse(uni.getStorageSync('shop_list'))
-				console.log(JSON.parse(uni.getStorageSync('shop_list')));
-				this.home_shop = res
-				res.forEach(item => {
-					num += item.num
-					price += item.price * item.num
-				})
-				this.total_price = price
-				this.cart_num = num
-			}
-		},
-
 		methods: {
-			onClick(e) {
-				console.log(e);
-
-				if (e.index == 0) {
-					console.log(111);
-					uni.switchTab({
-						url: '/pages/home/home'
-					});
-				} else {
-					console.log(222);
-					uni.switchTab({
-						url: '/pages/my/my'
-					});
-				}
-			},
-			buttonClick(e) {
-				console.log(e)
-				this.options[2].info++
-			},
 			...mapMutations('m_home', ['addToCart', 'jianToCart']),
 			async jia(item) {
 				this.total_price += item.price
 				this.cart_num++
 				item.num++
+				item.name = 'shop_list'
 				this.addToCart(item)
 			},
 			removeStorage() {
 				uni.removeStorageSync('shop_list')
-				this.naicha.homeInfo.forEach((item, index) => {
+				uni.removeStorageSync('naicha_list')
+				this.home.homeInfo.forEach((item, index) => {
 					for (let i = 0; i < item.length; i++) {
 						this.$set(item[i], 'num', 0)
 					}
 				})
+
 				this.total_price = 0
 				this.cart_num = 0
 			},
@@ -252,9 +190,10 @@
 				if (item.num < 0) {
 					item.num = 0
 				} else {
-					this.cart_num--
 					this.total_price -= item.price
-					this.jianToCart(item)
+					item.name = 'shop_list'
+					this.jianToCart(item, )
+					this.cart_num--
 				}
 			},
 			toAnchor(id) {
@@ -293,93 +232,11 @@
 					uni.$showMsg('付款失败', 1500)
 				}
 			},
-			async getNcInfo() {
-				const { data: res } = await uni.$http.post('/api/home', { query: 'naicha' })
-				console.log(res);
-				this.naicha.homeInfo = res.status
-			},
-			//获取导航栏信息
-			async getNcTab() {
-				const { data: res } = await uni.$http.post('/api/homeTab', { query: 'naichatab' })
-				console.log(res);
-				this.naicha.homeTab = res.status
-			}
-
 		}
 	}
 </script>
 
 <style lang="scss">
-	.container {
-		position: relative;
-		justify-content: space-between;
-
-		.nc-tab {
-			width: 100%;
-			position: fixed;
-			bottom: 0;
-
-			.uni-tab__cart-sub-left {
-				width: 100%;
-				display: flex;
-				justify-content: space-around;
-			}
-
-
-		}
-
-		.nc-cont {
-			height: 100vh;
-
-			.nc_swiper {
-				height: 25vh;
-				width: 100vw;
-
-				.swiper-item {
-					height: 100%;
-				}
-
-				img {
-					width: 100vw;
-					height: 100%;
-				}
-			}
-		}
-
-		//�ֲ�ͼ
-		.swiper-box {
-			height: 25vh;
-		}
-
-		.swiper-item {
-			/* #ifndef APP-NVUE */
-			display: flex;
-			/* #endif */
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			height: 200px;
-			color: #fff;
-		}
-
-		.swiper-item0 {
-			background-color: #cee1fd;
-		}
-
-		.swiper-item1 {
-			background-color: #b2cef7;
-		}
-
-		.swiper-item2 {
-			background-color: #cee1fd;
-		}
-
-		.image {
-			width: 750rpx;
-		}
-	}
-
-	//商品
 	.maodian {
 		height: 55vh;
 		display: flex;
@@ -492,13 +349,14 @@
 							}
 						}
 					}
+
+
 				}
 			}
 		}
 
 	}
 
-	//购物车
 	.jiesuan {
 		display: flex;
 		justify-content: center;

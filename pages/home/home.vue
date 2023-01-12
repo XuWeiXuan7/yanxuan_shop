@@ -1,6 +1,315 @@
-<style lang="scss">
-	* {}
+<template>
+	<view class="home">
+		<!-- title加文本 -->
+		<uni-nav-bar background-color="#c00000" left-icon="left" :border="false" statusBar="false">
+		</uni-nav-bar>
+		<!-- 头部内容 -->
+		<view class="home-content">
+			<view class="home-header">
+				<view class="home-headimg">
+					<img src="../home/image/logo.png" alt="">
+				</view>
+				<view class="home-headtitle">
+					<h4>严选便利店</h4>
+					<h6>客服电话:18086195020</h6>
+				</view>
+			</view>
+			<view class="home-group">
+				<view class="home-henfu">
+					<Marquee></Marquee>
+				</view>
+				<view class="home-group-item">
+					<navigator url="../../subpkg/kd/kd" class="item" hover-class="none">
+						<img src="../home/image/kd.jpg" alt="">
+						<text>快递代取</text>
+					</navigator>
+					<navigator url="../../subpkg/nc/nc" class="item" hover-class="none">
+						<img src="../home/image/nc.jpg" alt="">
+						<text>奶茶</text>
+					</navigator>
+					<navigator url="../../subpkg/jx/jx" class="item" hover-class="none">
+						<img src="../home/image/jx.jpg" alt="">
+						<text>驾校</text>
+					</navigator>
+					<navigator url="../../subpkg/jz/jz" class="item" hover-class="none">
+						<img src="../home/image/jz.jpg" alt="">
+						<text>兼职</text>
+					</navigator>
+				</view>
+			</view>
+			<view class="maodian">
+				<view class="maodian-left">
+					<scroll-view scroll-y="true" style="height: 100%;">
+						<view v-for="(item,index) in home.homeTab" :key="index" @click="toAnchor(index)" id="tabColor">
+							{{item.tabName}}
+						</view>
+					</scroll-view>
+				</view>
+				<view class="maodian-right">
+					<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
+						scroll-with-animation="true" scroll-top="100px">
+						<view class="maodian-zt" v-for="(item,index) of home.homeInfo" :key="index">
+							<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
+							<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
+								<view class="maodian-list">
+									<view class="maodian-img">
+										<img :src="item1.img" alt="">
+									</view>
+								</view>
+								<view class="maodian-content-title">
+									<view class="title1">{{item1.title}}</view>
+									<text class="title2">销量 : {{item1.sell}}</text>
+									<view class="addcut">
+										<view class="money">
+											￥{{item1.price}}
+										</view>
+										<view class="addcut1">
+											<view class="cut" @click="jian(item1)">
+												-
+											</view>
+											<text class="addcut-num">{{item1.num}}</text>
+											<view class="add" @click="jia(item1)">+
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+			</view>
+			<view class="jiesuan">
+				<view class="jiesuan-zt">
+					<view class="jiesuan-icon">
+						<view class="icon-zt">
+							<uni-icons type="cart" size="24" color="#fff" class="icon1" @click="trigger"></uni-icons>
+							<text class="icon-text1" @click="trigger">{{cart_num}}</text>
+						</view>
+						<text class="icon-text2">￥{{total_price}}</text>
+					</view>
+					<view class="jiesuan-button">
+						<button type="default" :class="{'jiesuan-btn':true,'jiesuan-err':btnerr}" @click="jiesuan"
+							:disabled="btnerr">去结算</button>
+					</view>
+					<view class="share">
+						<view :class="{'box':share}" @click="display"></view>
+						<view class="share-item" :class="{'show':share}">
+							<scroll-view scroll-y="true" style="max-height: 70vh;">
+								<view class="spOne">
+									<view class="spOne-text">
+										商品数量：
+										<text>{{cart_num}}</text>
+									</view>
+									<text @click="removeStorage">清空</text>
+								</view>
+								<view class="sp-cont" v-if="cart_num">
+									<view class="goshop_tchu" v-for="(item,index) of home_shop" :key="index">
+										<view class="sp-imgt">
+											<img :src="item.img" alt="">
+											<view class="sp-img-text">
+												<text class="title1">{{item.title}}</text>
+												<text class="title2">￥{{item.price}}</text>
+											</view>
+										</view>
+										<view class="addcut">
+											<view class="addcut1">
+												<view class="cut" @click="jian(item)">-</view>
+												<text class="addcut-num">{{item.num}}</text>
+												<view class="add" @click="jia(item)">+</view>
+											</view>
+										</view>
+									</view>
+								</view>
+								<view class="sp-cont" v-else>
+									<text>无商品</text>
+								</view>
+							</scroll-view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+<script>
+	import { mapState, mapMutations } from 'vuex'
+	export default {
+		data() {
+			return {
+				//商品数据
+				home: {
+					homeInfo: [],
+					homeTab: []
+				},
+				//锚点观看
+				toView: '',
+				//弹出层样式
+				share: false,
+				//商品个数
+				cart_num: 0,
+				//弹出层取余
+				btn_num: 0,
+				//商品数据
+				total_price: 0,
+				//结算
+				btnerr: true,
+				home_shop: []
+			}
+		},
+		onHide() {
+			console.log('退出页面');
+		},
+		onShow() {
+			var res = []
+			var num = 0
+			var price = 0
+			res = JSON.parse(uni.getStorageSync('shop_list'))
+			console.log(JSON.parse(uni.getStorageSync('shop_list')));
+			this.home_shop = res
+			res.forEach(item => {
+				num += item.num
+				price += item.price * item.num
+			})
+			this.total_price = price
+			this.cart_num = num
+		},
+		watch: {
+			total_price: function() {
+				if (this.total_price > 5) {
+					this.btnerr = false
+				} else {
+					this.btnerr = true
+				}
+			},
+			cart_num: function() {
+				var res = []
+				var num = 0
+				var price = 0
+				res = JSON.parse(uni.getStorageSync('shop_list'))
+				console.log(JSON.parse(uni.getStorageSync('shop_list')));
+				this.home_shop = res
+				res.forEach(item => {
+					num += item.num
+					price += item.price * item.num
+				})
+				this.total_price = price
+				this.cart_num = num
+			}
+		},
+		async mounted() {
+			console.log('父组件');
+			await this.getHomeInfo()
+			await this.getHomeTab()
+			let tabnum = this.home.homeTab.length
+			this.home.homeInfo.forEach((item, index) => {
+				for (let i = 0; i < item.length; i++) {
+					this.$set(item[i], 'num', 0)
+				}
+			})
+			console.log(this.home, this.home.homeTab);
+			//太难受了终于弄好了。本地存储商品
+			if (uni.getStorageSync('shop_list')) {
+				var res
+				this.home.homeInfo.map((item, index) => {
+					let len = JSON.parse(uni.getStorageSync('shop_list'))
+					item.forEach((item1, index1) => {
+						res = len.filter(it => {
+							return it.title === item1.title
+						})
+						if (res.length > 0) {
+							item[index1].num = res[0].num
+						}
+						this.cart_num += item[index1].num
+						// this.total_price += item[index1].num * item[index1].price
+					})
 
+				})
+			}
+		},
+		methods: {
+			...mapMutations('m_home', ['addToCart', 'jianToCart']),
+			async jia(item) {
+				console.log(item, 'item');
+				this.total_price += item.price
+				this.cart_num++
+				item.num++
+				this.addToCart(item)
+			},
+			removeStorage() {
+				uni.removeStorageSync('shop_list')
+				uni.removeStorageSync('naicha_list')
+				this.home.homeInfo.forEach((item, index) => {
+					for (let i = 0; i < item.length; i++) {
+						this.$set(item[i], 'num', 0)
+					}
+				})
+
+				this.total_price = 0
+				this.cart_num = 0
+			},
+			jian(item) {
+				item.num--
+				if (item.num < 0) {
+					item.num = 0
+				} else {
+					this.total_price -= item.price
+					item.name = 'shop_list'
+					this.jianToCart(item, )
+					this.cart_num--
+				}
+			},
+			toAnchor(id) {
+				let anchorId = 'anchor' + id
+				this.toView = ''
+				this.$nextTick(() => {
+					this.toView = anchorId;
+				})
+			},
+			trigger() {
+				this.btn_num++
+				if (this.btn_num % 2 == 1)
+					this.share = true;
+				else {
+					this.share = false;
+				}
+			},
+			display() {
+				this.btn_num++
+				this.share = false
+			},
+			async jiesuan() {
+				let fk = await uni.showModal({
+					title: '是否付款'
+				})
+				console.log(fk);
+				if (fk[1].confirm) {
+					uni.showLoading({
+						title: '数据加载中'
+					})
+					setTimeout(function() {
+						uni.hideLoading();
+						uni.$showMsg('付款成功', 1500)
+					}, 2000);
+				} else {
+					uni.$showMsg('付款失败', 1500)
+				}
+			},
+			//获取商品数据
+			async getHomeInfo() {
+				const { data: res } = await uni.$http.post('/api/home', { query: 'home' })
+				console.log(res);
+				this.home.homeInfo = res.status
+			},
+			//获取导航栏信息
+			async getHomeTab() {
+				const { data: res } = await uni.$http.post('/api/homeTab', { query: 'hometab' })
+				console.log(res);
+				this.home.homeTab = res.status
+			}
+		}
+	}
+</script>
+<style lang="scss">
 	.home {
 		box-sizing: border-box;
 		background-color: #C00000;
@@ -447,299 +756,3 @@
 		}
 	}
 </style>
-
-<template>
-	<view class="home">
-		<!-- title加文本 -->
-		<uni-nav-bar background-color="#c00000" left-icon="left" :border="false" statusBar="false">
-		</uni-nav-bar>
-		<!-- 头部内容 -->
-		<view class="home-content">
-			<view class="home-header">
-				<view class="home-headimg">
-					<img src="../home/image/logo.png" alt="">
-				</view>
-				<view class="home-headtitle">
-					<h4>严选便利店</h4>
-					<h6>客服电话:18086195020</h6>
-				</view>
-			</view>
-			<view class="home-group">
-				<view class="home-henfu">
-					<Marquee></Marquee>
-				</view>
-				<view class="home-group-item">
-					<navigator url="../../subpkg/kd/kd" class="item" hover-class="none">
-						<img src="../home/image/kd.jpg" alt="">
-						<text>快递代取</text>
-					</navigator>
-					<navigator url="../../subpkg/nc/nc" class="item" hover-class="none">
-						<img src="../home/image/nc.jpg" alt="">
-						<text>奶茶</text>
-					</navigator>
-					<navigator url="../../subpkg/jx/jx" class="item" hover-class="none">
-						<img src="../home/image/jx.jpg" alt="">
-						<text>驾校</text>
-					</navigator>
-					<navigator url="../../subpkg/jz/jz" class="item" hover-class="none">
-						<img src="../home/image/jz.jpg" alt="">
-						<text>兼职</text>
-					</navigator>
-				</view>
-			</view>
-			<view class="maodian">
-				<view class="maodian-left">
-					<scroll-view scroll-y="true" style="height: 100%;">
-						<view v-for="(item,index) in home.homeTab" :key="index" @click="toAnchor(index)"
-							:class='{tabColor:bools["bool"+(index+1)]}' id="tabColor">
-							{{item.tabName}}
-						</view>
-					</scroll-view>
-				</view>
-				<view class="maodian-right">
-					<scroll-view scroll-y="true" style="height: 100%;" :scroll-into-view="toView"
-						scroll-with-animation="true" scroll-top="100px">
-						<view class="maodian-zt" v-for="(item,index) of home.homeInfo" :key="index">
-							<view class="maodian-title" :id="'anchor'+index.toString()">{{item[0].tab}}</view>
-							<view class="maodian-content" v-for="(item1,index1) of item" :key="index1">
-								<view class="maodian-list">
-									<view class="maodian-img">
-										<img :src="item1.img" alt="">
-									</view>
-								</view>
-								<view class="maodian-content-title">
-									<view class="title1">{{item1.title}}</view>
-									<text class="title2">销量 : {{item1.sell}}</text>
-									<view class="addcut">
-										<view class="money">
-											￥{{item1.price}}
-										</view>
-										<view class="addcut1">
-											<view class="cut" @click="jian(item1)">
-												-
-											</view>
-											<text class="addcut-num">{{item1.num}}</text>
-											<view class="add" @click="jia(item1)">+
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</scroll-view>
-				</view>
-			</view>
-			<view class="jiesuan">
-				<view class="jiesuan-zt">
-					<view class="jiesuan-icon">
-						<view class="icon-zt">
-							<uni-icons type="cart" size="24" color="#fff" class="icon1" @click="trigger"></uni-icons>
-							<text class="icon-text1" @click="trigger">{{cart_num}}</text>
-						</view>
-						<text class="icon-text2">￥{{total_price}}</text>
-					</view>
-					<view class="jiesuan-button">
-						<button type="default" :class="{'jiesuan-btn':true,'jiesuan-err':btnerr}" @click="jiesuan"
-							:disabled="btnerr">去结算</button>
-					</view>
-					<view class="share">
-						<view :class="{'box':share}" @click="display"></view>
-						<view class="share-item" :class="{'show':share}">
-							<scroll-view scroll-y="true" style="max-height: 70vh;">
-								<view class="spOne">
-									<view class="spOne-text">
-										商品数量：
-										<text>{{cart_num}}</text>
-									</view>
-									<text @click="removeStorage">清空</text>
-								</view>
-								<view class="sp-cont" v-if="cart_num">
-									<view class="goshop_tchu" v-for="(item,index) of home_shop" :key="index">
-										<view class="sp-imgt">
-											<img :src="item.img" alt="">
-											<view class="sp-img-text">
-												<text class="title1">{{item.title}}</text>
-												<text class="title2">￥{{item.price}}</text>
-											</view>
-										</view>
-										<view class="addcut">
-											<view class="addcut1">
-												<view class="cut" @click="jian(item)">-</view>
-												<text class="addcut-num">{{item.num}}</text>
-												<view class="add" @click="jia(item)">+</view>
-											</view>
-										</view>
-									</view>
-								</view>
-								<view class="sp-cont" v-else>
-									<text>无商品</text>
-								</view>
-							</scroll-view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-	</view>
-</template>
-<script>
-	import { mapState, mapMutations } from 'vuex'
-	export default {
-		data() {
-			return {
-				//锚点观看
-				toView: '',
-				//弹出层样式
-				share: false,
-				//商品个数
-				cart_num: 0,
-				//弹出层取余
-				btn_num: 0,
-				//样式
-				bools: {},
-				//商品数据
-				home: {
-					homeInfo: [],
-					homeTab: []
-				},
-				total_price: 0,
-				//结算
-				btnerr: true
-			}
-		},
-
-		async onLoad() {
-			//获取tab的数量
-			// this.huadong()
-			await this.getHomeInfo()
-			await this.getHomeTab()
-			let tabnum = this.home.homeTab.length
-			this.home.homeInfo.forEach((item, index) => {
-				for (let i = 0; i < item.length; i++) {
-					this.$set(item[i], 'num', 0)
-				}
-			})
-			//太难受了终于弄好了。本地存储商品
-			if (uni.getStorageSync('shop_list')) {
-				var res
-				this.home.homeInfo.map((item, index) => {
-					let len = JSON.parse(uni.getStorageSync('shop_list'))
-					item.forEach((item1, index1) => {
-						res = len.filter(it => {
-							return it.id === item1.id
-						})
-						if (res.length > 0) {
-							item[index1].num = res[0].num
-						}
-						this.cart_num += item[index1].num
-						this.total_price += item[index1].num * item[index1].price
-					})
-
-				})
-			}
-		},
-		watch: {
-			total_price: function() {
-				if (this.total_price > 5) {
-					this.btnerr = false
-				} else {
-					this.btnerr = true
-				}
-			}
-		},
-		computed: {
-			home_shop: function() {
-				var home_s = []
-				var res = []
-				this.home.homeInfo.forEach(item => {
-					res = item.filter(item1 => {
-						return item1.num > 0
-					})
-					if (res)
-						res.forEach(item2 => {
-							home_s.push(item2)
-						})
-				})
-				return home_s
-
-			}
-		},
-		methods: {
-			...mapMutations('m_home', ['addToCart', 'jianToCart']),
-			async jia(item) {
-				this.total_price += item.price
-				this.cart_num++
-				item.num++
-				this.addToCart(item)
-			},
-			removeStorage() {
-				uni.removeStorageSync('shop_list')
-				this.home.homeInfo.forEach((item, index) => {
-					for (let i = 0; i < item.length; i++) {
-						this.$set(item[i], 'num', 0)
-					}
-				})
-				this.total_price = 0
-				this.cart_num = 0
-			},
-			jian(item) {
-				item.num--
-				if (item.num < 0) {
-					item.num = 0
-				} else {
-					this.total_price -= item.price
-					this.jianToCart(item)
-					this.cart_num--
-				}
-			},
-			toAnchor(id) {
-				let anchorId = 'anchor' + id
-				this.toView = ''
-				this.$nextTick(() => {
-					this.toView = anchorId;
-				})
-			},
-			trigger() {
-				this.btn_num++
-				if (this.btn_num % 2 == 1)
-					this.share = true;
-				else {
-					this.share = false;
-				}
-			},
-			display() {
-				this.btn_num++
-				this.share = false
-			},
-			async jiesuan() {
-				let fk = await uni.showModal({
-					title: '是否付款'
-				})
-				console.log(fk);
-				if (fk[1].confirm) {
-					uni.showLoading({
-						title: '数据加载中'
-					})
-					setTimeout(function() {
-						uni.hideLoading();
-						uni.$showMsg('付款成功', 1500)
-					}, 2000);
-				} else {
-					uni.$showMsg('付款失败', 1500)
-				}
-			},
-			//获取商品数据
-			async getHomeInfo() {
-				const { data: res } = await uni.$http.post('/api/home')
-				console.log(res);
-				this.home.homeInfo = res.status
-			},
-			//获取导航栏信息
-			async getHomeTab() {
-				const { data: res } = await uni.$http.post('/api/homeTab')
-				console.log(res);
-				this.home.homeTab = res.status
-			}
-		}
-	}
-</script>
