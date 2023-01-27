@@ -188,7 +188,6 @@
 			}
 
 		},
-		computed: {},
 		//监视属性
 		watch: {
 			//监视价格变化 确认付款
@@ -228,7 +227,7 @@
 					this.$set(item[i], 'num', 0)
 				}
 			})
-			console.log(this.home, this.home.homeTab);
+			// console.log(this.home, this.home.homeTab);
 			//太难受了终于弄好了。本地存储商品
 			if (uni.getStorageSync('shop_list')) {
 				var res

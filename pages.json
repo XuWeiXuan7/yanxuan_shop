@@ -13,7 +13,8 @@
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "严选便利店",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 	],

@@ -1,6 +1,5 @@
 <template>
 	<view class="container">
-
 		<view class="nc-tab">
 			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" class="gs" @click="onClick" />
 		</view>
