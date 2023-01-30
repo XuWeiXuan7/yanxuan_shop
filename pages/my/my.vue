@@ -13,10 +13,14 @@
 		<view class="denglu-zt" v-else>
 			<view class="touxiang">
 				<view class="tou_img">
-					<img :src="userinfo.userInfo.avatarUrl" alt="">
+					<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+						<img class="avatar" :src="avatarUrl"></img>
+					</button>
+
 				</view>
 				<view class="tou_title">
-					<text class="tou_name">{{userinfo.userInfo.nickName}}</text>
+					<!-- <text class="tou_name">{{userinfo.userInfo.nickName}}</text> -->
+					<input type="nickname" class="weui-input" placeholder="请输入昵称" :value="userinfo.userInfo.nickName">
 					<br>
 					<text class="tou_id">{{userinfo.cloudID | UserID}}</text>
 				</view>
@@ -26,7 +30,7 @@
 					<text>我的订单</text>
 				</view>
 				<view class="dingdan_xuan">
-					<view class="xuanxiang" v-for="(item,index) in xuanx" :key="index">
+					<view class="xuanxiang" v-for="(item,index) in xuanx" :key="index" @click="orderclass(index)">
 						<text>{{item}}</text>
 					</view>
 				</view>
@@ -93,6 +97,7 @@
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
+				avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 			}
 		},
 		filters: {
@@ -100,7 +105,15 @@
 				return data.substr(0, 11)
 			}
 		},
+		onLoad() {
+			this.userinfo = uni.getStorageSync('user')
+		},
 		methods: {
+			onChooseAvatar(e) {
+				console.log(e);
+				this.avatarUrl = e.detail.avatarUrl
+
+			},
 			//导航栏返回首页
 			back() {
 				console.log(111);
@@ -110,10 +123,10 @@
 			},
 			login() {
 				let that = this
-				uni.getUserProfile({
+				wx.getUserProfile({
 					desc: '用于用户登录',
 					success: res => {
-						console.log(res);
+						uni.setStorageSync('user', res)
 						that.userinfo = res
 					},
 					fail() {
@@ -121,6 +134,17 @@
 					}
 				})
 
+			},
+			orderclass(index) {
+				if (index == 1) {
+					uni.redirectTo({
+						url: '../../subpkg/myaddress/myaddress'
+					})
+				} else if (index == 0) {
+					uni.redirectTo({
+						url: '../../subpkg/myorder/myorder'
+					})
+				}
 			}
 		}
 	}
@@ -153,12 +177,23 @@
 
 			.tou_img {
 				width: 20vw;
+				margin-right: 50rpx;
 
 				img {
 					width: 150rpx;
 					height: 150rpx;
 					border-radius: 150rpx;
 					box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+				}
+
+				button {
+					background-color: #FEE34C;
+					overflow: unset;
+					border: 0px solid pink;
+
+					&::after {
+						border: initial;
+					}
 				}
 			}
 

@@ -6,7 +6,7 @@ export default {
 	}),
 
 	mutations: {
-		savelocal(state, item) {
+		savelocal(state) {
 			uni.setStorageSync('shop_list', JSON.stringify(state.goods))
 		},
 		//加商品

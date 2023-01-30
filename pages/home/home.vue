@@ -308,22 +308,52 @@
 			},
 			//结算
 			async jiesuan() {
-				let fk = await uni.showModal({
-					title: '是否付款'
-				})
-				console.log(fk);
-				if (fk[1].confirm) {
-					uni.showLoading({
-						title: '数据加载中'
+				try {
+					let ar = JSON.parse(uni.getStorageSync('dizhi'))
+					if (uni.getStorageSync('dizhi') != null) {
+						let fk = await uni.showModal({
+							title: '是否付款'
+						})
+						console.log(fk);
+						if (fk[1].confirm) {
+							//获取结算的数据和账号信息
+							const ID = uni.getStorageSync('user').signature
+							const address = uni.getStorageSync('dizhi')
+							console.log(shop);
+							console.log(ID);
+							const { data: res } = await uni.$http.post('/api/jiesuan', {
+								commodity: uni.getStorageSync(
+									'shop_list'),
+								signature: ID,
+								address,
+								price: this.total_price
+							})
+							console.log(res);
+							uni.showLoading({
+								title: '数据加载中'
+							})
+							console.log(uni.getStorageSync('shop_list'));
+							console.log(res);
+							if (res.status == 0) {
+								setTimeout(() => {
+									uni.hideLoading()
+									uni.$showMsg('付款成功', 2000)
+									this.removeStorage()
+								}, 2000)
+							}
+						} else {
+							uni.$showMsg('付款失败', 1500)
+						}
+					}
+				} catch (e) {
+					//TODO handle the exception
+					uni.redirectTo({
+						url: '../../subpkg/address/address'
 					})
-					setTimeout(function() {
-						uni.hideLoading();
-						uni.$showMsg('付款成功', 1500)
-					}, 2000);
-				} else {
-					uni.$showMsg('付款失败', 1500)
 				}
+
 			},
+
 			//获取商品数据
 			async getHomeInfo() {
 				const { data: res } = await uni.$http.post('/api/home', { query: 'home' })

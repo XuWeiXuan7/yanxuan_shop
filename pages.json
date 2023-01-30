@@ -41,6 +41,7 @@
 					"onReachBottomDistance": 150,
 					"enablePullDownRefresh": true,
 					"backgroundColor": "#f8f8f8"
+
 				}
 			},
 			{
@@ -59,6 +60,31 @@
 					"enablePullDownRefresh": false
 				}
 
+			},
+			{
+				"path": "myaddress/myaddress",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false,
+					"navigationBarBackgroundColor": "#fff",
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "address/address",
+				"style": {
+					"enablePullDownRefresh": false,
+					"navigationBarBackgroundColor": "#fff",
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "myorder/myorder",
+				"style": {
+					"enablePullDownRefresh": false,
+					"navigationBarBackgroundColor": "#fff",
+					"navigationStyle": "custom"
+				}
 			}
 		]
 	}],

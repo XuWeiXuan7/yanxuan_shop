@@ -57,7 +57,19 @@
 		"setting": {
 			"urlCheck": false
 		},
-		"usingComponents": true
+		"usingComponents": true,
+		"permission": {
+			"scope.userLocation": {
+				"desc": "获取用户当前位置进行定位操作"
+			}
+		},
+		"requiredPrivateInfos": [
+			"getLocation",
+			"onLocationChange",
+			"startLocationUpdateBackground",
+			"chooseAddress",
+			"chooseLocation"
+		]
 	},
 	"vueVersion": "2"
 }
