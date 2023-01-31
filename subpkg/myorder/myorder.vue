@@ -3,21 +3,24 @@
 		<uni-nav-bar background-color="#fff" left-text="返回" left-icon="left" fixed="true" :border="false"
 			statusBar="false" @clickLeft="back" backgroundColor="#FEE34C" title="已完成订单">
 		</uni-nav-bar>
-		<view class="dingdan">
+		<view class="wudingdan" v-if="dingdan==''">
+			<text>无订单</text>
+		</view>
+		<view class="dingdan" v-else>
 			<view class="dingdetail">
-				<view class="dingdan-top">
-					<view class="cont">
-						<img src="https://i.postimg.cc/jj5kLWQH/1.jpg" alt="">
+				<view class="dingdan-top" v-for="(item,index) in dingdan" :key="index">
+					<view class="cont" v-for="(item1,index) in item" :key="index">
+						<img :src="item1.img">
 						<view class="cont-title">
-							<text>肉蛋肠</text>
+							<text>{{item1.title}}</text>
 							<br>
-							<text>x1</text>
+							<text>x{{item1.num}}</text>
 						</view>
-						<text>￥5.00</text>
+						<text>￥{{item1.price}}</text>
 					</view>
-				</view>
-				<view class="dingdan-bot">
-					<text>合计:￥12.00</text>
+					<view class="dingdan-bot">
+						<text>合计:￥{{item | totalprice}}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -31,7 +34,15 @@
 				dingdan: []
 			}
 		},
-
+		filters: {
+			totalprice(data) {
+				let price = 0
+				data.forEach((item) => {
+					price += item.price * item.num
+				})
+				return price
+			}
+		},
 		async mounted() {
 			await this.mydingdan()
 		},
@@ -43,12 +54,19 @@
 			},
 			//获取订单
 			async mydingdan() {
-				const idt = uni.getStorageSync('user').signature
-				console.log(idt);
-				const { data: res } = await uni.$http.post('/my/mydingdan', {
-					signature: idt
-				})
-				this.dingdan = res.status
+				try {
+					const id = uni.getStorageSync('openid')
+					const { data: res } = await uni.$http.post('/my/mydingdan', {
+						signature: id
+					})
+					// this.dingdan = res.status
+					res.status.forEach((item) => {
+						this.dingdan.push(JSON.parse(item.commodity))
+					})
+
+				} catch (e) {
+					//TODO handle the exception
+				}
 			}
 		}
 	}
@@ -59,18 +77,37 @@
 		height: 100vh;
 		background-color: rgba(240, 240, 240, 1);
 
+		.wudingdan {
+			margin-top: 20rpx;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			text {
+				border-radius: 20rpx;
+				text-align: center;
+				line-height: 10vh;
+				background-color: #FFE658;
+				width: 90vw;
+				height: 10vh;
+			}
+		}
+
 		.dingdan {
-			background-color: #fff;
+			// background-color: #fff;
 			margin: 20rpx auto;
 			width: 90vw;
 
 			.dingdan-top {
 				display: flex;
 				flex-direction: column;
-				padding: 50rpx;
+				margin-bottom: 30rpx;
+				background-color: #fff;
 
 				.cont {
 					display: flex;
+					padding: 50rpx;
 
 					img {
 						width: 100rpx;

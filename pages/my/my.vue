@@ -92,12 +92,13 @@
 		data() {
 			return {
 				userinfo: '',
-				xuanx: ['全部订单', '我的地址', '其他订单'],
+				xuanx: ['全部订单', '我的地址', '退出登录'],
 				indicatorDots: true,
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
-				avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+				avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
+				openID: ''
 			}
 		},
 		filters: {
@@ -133,6 +134,31 @@
 						return uni.$showMsg('您取消了登录授权')
 					}
 				})
+				uni.login({
+					provider: "weixin",
+					success: function(res) {
+						let appid = "wxc2b95f13ebf94d9e";
+						let secret = "e3eba071e51b37c5f5006f463d0446dc";
+						let url =
+							"https://api.weixin.qq.com/sns/jscode2session?appid=" +
+							appid +
+							"&secret=" +
+							secret +
+							"&js_code=" +
+							res.code +
+							"&grant_type=authorization_code";
+						uni.request({
+							url: url, // 请求路径
+							success: (r) => {
+								console.log("r", r);
+								console.info("用户的openId", r.data.openid);
+								uni.setStorageSync('openid', r.data.openid)
+							},
+						});
+					},
+				});
+
+
 
 			},
 			orderclass(index) {
@@ -144,6 +170,12 @@
 					uni.redirectTo({
 						url: '../../subpkg/myorder/myorder'
 					})
+				} else if (index == 2) {
+					uni.removeStorageSync('openid')
+					uni.removeStorageSync('user')
+					uni.removeStorageSync('dizhi')
+					uni.removeStorageSync('shop')
+					this.userinfo = ''
 				}
 			}
 		}

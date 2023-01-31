@@ -317,9 +317,8 @@
 						console.log(fk);
 						if (fk[1].confirm) {
 							//获取结算的数据和账号信息
-							const ID = uni.getStorageSync('user').signature
+							const ID = uni.getStorageSync('openid')
 							const address = uni.getStorageSync('dizhi')
-							console.log(shop);
 							console.log(ID);
 							const { data: res } = await uni.$http.post('/api/jiesuan', {
 								commodity: uni.getStorageSync(
@@ -346,6 +345,7 @@
 						}
 					}
 				} catch (e) {
+					console.log(e.message);
 					//TODO handle the exception
 					uni.redirectTo({
 						url: '../../subpkg/address/address'
