@@ -40,7 +40,8 @@
 				"style": {
 					"onReachBottomDistance": 150,
 					"enablePullDownRefresh": true,
-					"backgroundColor": "#f8f8f8"
+					"backgroundColor": "#f8f8f8",
+					"navigationBarTitleText": "快递代拿"
 
 				}
 			},
@@ -50,7 +51,7 @@
 			{
 				"path": "jx/jx",
 				"style": {
-
+					"navigationBarTitleText": "驾校"
 				}
 
 			}, {
@@ -80,6 +81,14 @@
 			},
 			{
 				"path": "myorder/myorder",
+				"style": {
+					"enablePullDownRefresh": false,
+					"navigationBarBackgroundColor": "#fff",
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "soundcode/soundcode",
 				"style": {
 					"enablePullDownRefresh": false,
 					"navigationBarBackgroundColor": "#fff",

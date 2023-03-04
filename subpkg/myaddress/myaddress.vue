@@ -4,7 +4,7 @@
 			statusBar="false" @clickLeft="back" backgroundColor="#FEE34C">
 		</uni-nav-bar>
 		<view class="address_zt">
-			<view class="kong" @click="add" v-if="Object.keys(address).length==0">
+			<view class="kong" @click="add" v-if="address.name==undefined">
 				<text>+添加收货地址</text>
 			</view>
 			<view class="address_cl" v-else>
@@ -31,26 +31,28 @@
 	export default {
 		data() {
 			return {
-				address: {}
+				address: {},
+				tag: 0
 			}
 		},
-		onLoad() {
-			console.log(111);
+
+		onShow() {
 			try {
 				this.address = JSON.parse(uni.getStorageSync('dizhi'))
 			} catch (e) {
+				this.tag = 1
 				//TODO handle the exception
 			}
 		},
 		methods: {
 			back() {
-				uni.redirectTo({
+				uni.reLaunch({
 					url: '../../pages/my/my'
 				})
 			},
 			// 详细地址
 			add() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '../address/address'
 				})
 			},

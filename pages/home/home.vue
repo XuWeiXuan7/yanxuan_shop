@@ -310,7 +310,7 @@
 			async jiesuan() {
 				try {
 					let ar = JSON.parse(uni.getStorageSync('dizhi'))
-					if (uni.getStorageSync('dizhi') != null) {
+					if (ar != null) {
 						let fk = await uni.showModal({
 							title: '是否付款'
 						})
@@ -345,26 +345,43 @@
 						}
 					}
 				} catch (e) {
-					console.log(e.message);
+					if (uni.getStorageSync('openid') == '') {
+						uni.redirectTo({
+							url: '../my/my'
+						})
+					}
 					//TODO handle the exception
-					uni.redirectTo({
-						url: '../../subpkg/address/address'
-					})
+					if (uni.getStorageSync('dizhi') == '') {
+						uni.redirectTo({
+							url: '../../subpkg/address/address'
+						})
+					}
+					console.log(e);
 				}
 
 			},
 
 			//获取商品数据
 			async getHomeInfo() {
-				const { data: res } = await uni.$http.post('/api/home', { query: 'home' })
-				console.log(res);
-				this.home.homeInfo = res.status
+				try {
+					const { data: res } = await uni.$http.post('/api/home', { query: 'home' })
+					console.log(res);
+					this.home.homeInfo = res.status
+				} catch (e) {
+					console.log(e);
+					//TODO handle the exception
+				}
 			},
 			//获取导航栏信息
 			async getHomeTab() {
-				const { data: res } = await uni.$http.post('/api/homeTab', { query: 'hometab' })
-				console.log(res);
-				this.home.homeTab = res.status
+				try {
+					const { data: res } = await uni.$http.post('/api/homeTab', { query: 'hometab' })
+					console.log(res);
+					this.home.homeTab = res.status
+				} catch (e) {
+					console.log(e);
+					//TODO handle the exception
+				}
 			}
 		}
 	}

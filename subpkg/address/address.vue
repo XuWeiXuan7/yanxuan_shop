@@ -44,9 +44,9 @@
 			return {
 				address: {
 					mor: true,
-					detaddress: '',
-					name: '',
-					phone: ''
+					detaddress: '长江工程职业技术学院',
+					name: '许',
+					phone: '18086195020'
 				}
 			}
 		},
@@ -58,11 +58,16 @@
 				})
 			},
 			change() {
+				console.log(222);
+				console.log(this.address.mor);
 				this.address.mor = !this.address.mor
 			},
+			shur(e) {
 
+			},
 			addsubmit() {
 				const phone = this.address.phone
+				console.log(this.address);
 				if (this.address.name !== '' && this.address.detaddress !== '') {
 					console.log(222);
 					if (phone) {
@@ -89,6 +94,7 @@
 					console.log(111);
 					uni.$showMsg('输入不能为空', 2000)
 				}
+
 			}
 		}
 	}

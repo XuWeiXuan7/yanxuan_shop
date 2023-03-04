@@ -4,7 +4,7 @@
 			statusBar="false" @clickLeft="back" backgroundColor="#FEE34C">
 		</uni-nav-bar>
 
-		<view class="denglu" v-if="userinfo==''">
+		<view class="denglu" v-if="tag==1&&userinfo==''">
 			<view class="dl_img">
 				<img src="./image/logo.png" alt="">
 			</view>
@@ -19,7 +19,6 @@
 
 				</view>
 				<view class="tou_title">
-					<!-- <text class="tou_name">{{userinfo.userInfo.nickName}}</text> -->
 					<input type="nickname" class="weui-input" placeholder="请输入昵称" :value="userinfo.userInfo.nickName">
 					<br>
 					<text class="tou_id">{{userinfo.cloudID | UserID}}</text>
@@ -65,7 +64,7 @@
 							<uni-icons type="person-filled" size="30" color="#9B7A53"></uni-icons>
 							<text>管理员申请</text>
 						</view>
-						<view class="vip_sq">
+						<view class="vip_sq" @click="vip">
 							<text>轻松管理店铺</text>
 							<uni-icons type="right"></uni-icons>
 						</view>
@@ -76,7 +75,7 @@
 							</uni-icons>
 							<text>源码需求</text>
 						</view>
-						<view class="scund">
+						<view class="scund" @click="gaincode">
 							<text>源码需求申请</text>
 							<uni-icons type="right"></uni-icons>
 						</view>
@@ -98,16 +97,24 @@
 				interval: 2000,
 				duration: 500,
 				avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
-				openID: ''
+				openID: '',
+				tag: 0
 			}
 		},
 		filters: {
 			UserID(data) {
-				return data.substr(0, 11)
+				try {
+					return data.substr(0, 11)
+				} catch (e) {
+					//TODO handle the exception
+					console.log('加载问题');
+				}
 			}
 		},
+
 		onLoad() {
 			this.userinfo = uni.getStorageSync('user')
+			this.tag = 1
 		},
 		methods: {
 			onChooseAvatar(e) {
@@ -157,9 +164,6 @@
 						});
 					},
 				});
-
-
-
 			},
 			orderclass(index) {
 				if (index == 1) {
@@ -177,6 +181,16 @@
 					uni.removeStorageSync('shop')
 					this.userinfo = ''
 				}
+			},
+			gaincode() {
+				uni.redirectTo({
+					url: '../../subpkg/soundcode/soundcode'
+				})
+			},
+			vip() {
+				// uni.redirectTo({
+				// 	url: '.'
+				// })
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 		<uni-nav-bar background-color="#fff" left-text="返回" left-icon="left" fixed="true" :border="false"
 			statusBar="false" @clickLeft="back" backgroundColor="#FEE34C" title="已完成订单">
 		</uni-nav-bar>
-		<view class="wudingdan" v-if="dingdan==''">
+		<view class="wudingdan" v-if="tag==1&&dingdan.length==0">
 			<text>无订单</text>
 		</view>
 		<view class="dingdan" v-else>
@@ -31,7 +31,8 @@
 	export default {
 		data() {
 			return {
-				dingdan: []
+				dingdan: [],
+				tag: 0
 			}
 		},
 		filters: {
@@ -43,12 +44,14 @@
 				return price
 			}
 		},
-		async mounted() {
+
+		async onShow() {
 			await this.mydingdan()
+			console.log(this.dingdan.length);
 		},
 		methods: {
 			back() {
-				uni.redirectTo({
+				uni.reLaunch({
 					url: '../../pages/my/my'
 				})
 			},
@@ -60,11 +63,12 @@
 						signature: id
 					})
 					// this.dingdan = res.status
+					this.tag = 1
 					res.status.forEach((item) => {
 						this.dingdan.push(JSON.parse(item.commodity))
 					})
-
 				} catch (e) {
+					console.log(e);
 					//TODO handle the exception
 				}
 			}
@@ -73,6 +77,10 @@
 </script>
 
 <style lang="scss">
+	[v-cloak] {
+		display: none;
+	}
+
 	.main {
 		height: 100vh;
 		background-color: rgba(240, 240, 240, 1);

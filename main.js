@@ -5,14 +5,14 @@ import store from '@/store/index.js'
 Vue.config.productionTip = false
 import { $http } from '@escook/request-miniprogram'
 uni.$http = $http
-$http.baseUrl = 'http://192.168.0.103:8080'
+$http.baseUrl = 'http://127.0.0.1:8080'
 App.mpType = 'app'
 $http.beforeRequest = function(options) {
 	uni.showLoading({
 		title: '数据加载中...'
 	})
 
-	// console.log(store)
+	// console.log(store) 
 
 	// 判断当前请求的是否为有权限的接口
 	// if (options.url.indexOf('/my/') !== -1) {
