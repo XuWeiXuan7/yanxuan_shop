@@ -10,7 +10,7 @@
 			// }
 		},
 		onHide: function() {
-			console.log('App Hide7777')
+			console.log('App Hide7777888')
 		}
 	}
 </script>
