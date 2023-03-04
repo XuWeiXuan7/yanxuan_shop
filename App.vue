@@ -10,7 +10,7 @@
 			// }
 		},
 		onHide: function() {
-			console.log('App Hide测试1')
+			console.log('App Hide测试12')
 		}
 	}
 </script>
