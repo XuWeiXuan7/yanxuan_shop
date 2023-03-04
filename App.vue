@@ -10,7 +10,7 @@
 			// }
 		},
 		onHide: function() {
-			console.log('App Hide测试123456667777')
+			console.log('App Hide测试1234566677778888')
 		}
 	}
 </script>
