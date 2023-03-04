@@ -10,11 +10,7 @@
 			// }
 		},
 		onHide: function() {
-<<<<<<< HEAD
-			console.log('App Hide7777888')
-=======
 			console.log('App Hide测试1234')
->>>>>>> 8db75bf73b56168bd28608c0444d86ccbbd10386
 		}
 	}
 </script>
