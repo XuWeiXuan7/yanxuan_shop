@@ -94,6 +94,13 @@
 					"navigationBarBackgroundColor": "#fff",
 					"navigationStyle": "custom"
 				}
+			}, {
+				"path": "kd_details/kd_details",
+				"style": {
+					"navigationBarTitleText": "快递代拿信息",
+					"enablePullDownRefresh": false
+				}
+
 			}
 		]
 	}],
@@ -105,5 +112,12 @@
 		"app-plus": {
 			"background": "#efeff4"
 		}
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"fui-(.*)": "firstui-uni/firstui/fui-$1/fui-$1.vue"
+		}
 	}
+
 }

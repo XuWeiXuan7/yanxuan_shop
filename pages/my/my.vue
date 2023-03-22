@@ -16,7 +16,6 @@
 					<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
 						<img class="avatar" :src="avatarUrl"></img>
 					</button>
-
 				</view>
 				<view class="tou_title">
 					<input type="nickname" class="weui-input" placeholder="请输入昵称" :value="userinfo.userInfo.nickName">
@@ -118,7 +117,7 @@
 		},
 		methods: {
 			onChooseAvatar(e) {
-				console.log(e);
+				console.log(1111);
 				this.avatarUrl = e.detail.avatarUrl
 
 			},

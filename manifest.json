@@ -57,7 +57,9 @@
 		"setting": {
 			"urlCheck": false
 		},
-		"usingComponents": true,
+		"usingComponents": {
+			"van-button": "@vant/weapp/button/index"
+		},
 		"permission": {
 			"scope.userLocation": {
 				"desc": "获取用户当前位置进行定位操作"

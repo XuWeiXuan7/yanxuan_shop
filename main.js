@@ -5,9 +5,9 @@ import store from '@/store/index.js'
 Vue.config.productionTip = false
 import { $http } from '@escook/request-miniprogram'
 uni.$http = $http
-$http.baseUrl = 'http://127.0.0.1:8080'
+$http.baseUrl = 'http://127.0.0.1:7775'
 App.mpType = 'app'
-$http.beforeRequest = function (options) {
+$http.beforeRequest = function(options) {
 	uni.showLoading({
 		title: '数据加载中...'
 	})
@@ -15,16 +15,17 @@ $http.beforeRequest = function (options) {
 	// console.log(store) 
 
 	// 判断当前请求的是否为有权限的接口
-	// if (options.url.indexOf('/my/') !== -1) {
-	// 	options.header = {
-	// 		Authorization: store.state.m_user.token
-	// 	}
-	// }
+	if (options.url.indexOf('/my/') !== -1) {
+		options.header = {
+			Authorization: store.state.m_user.token
+		}
+		console.log(store.state.m_user.token, '6666666');
+	}
 }
-$http.afterRequest = function () {
+$http.afterRequest = function() {
 	uni.hideLoading()
 }
-uni.$showMsg = function (title = '数据请求失败111！', duration = 1500) {
+uni.$showMsg = function(title = '数据请求失败111！', duration = 1500) {
 	uni.showToast({
 		title,
 		duration,
