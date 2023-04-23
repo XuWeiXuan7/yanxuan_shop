@@ -4,7 +4,7 @@
 			statusBar="false" @clickLeft="back" backgroundColor="#FEE34C">
 		</uni-nav-bar>
 
-		<view class="denglu" v-if="tag==1&&userinfo==''">
+		<view class="denglu" v-if="tag==1&&openID==''">
 			<view class="dl_img">
 				<img src="./image/logo.png" alt="">
 			</view>
@@ -14,7 +14,7 @@
 			<view class="touxiang">
 				<view class="tou_img">
 					<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-						<img class="avatar" :src="avatarUrl"></img>
+						<img class="avatar" :src="userinfo.userInfo.avatarUrl"></img>
 					</button>
 				</view>
 				<view class="tou_title">
@@ -25,7 +25,7 @@
 			</view>
 			<view class="dingdan">
 				<view class="dingdan-title">
-					<text>我的订单</text>
+					<text>我的功能</text>
 				</view>
 				<view class="dingdan_xuan">
 					<view class="xuanxiang" v-for="(item,index) in xuanx" :key="index" @click="orderclass(index)">
@@ -36,19 +36,9 @@
 			<view class="swiper_lun">
 				<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular
 					indicator-active-color="red" :current="0">
-					<swiper-item>
+					<swiper-item v-for="(item,index) in myswiper" :key="index">
 						<view class="swiper-item">
-							<img src="../home/image/upload/2023/01/09/lun3_20230109065711A001.jpg" alt="" class="img01">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../home/image/upload/2023/01/09/lun3_20230109065711A001.jpg" alt="">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../home/image/upload/2023/01/09/lun3_20230109065711A001.jpg" alt="">
+							<img :src="item.img" alt="">
 						</view>
 					</swiper-item>
 				</swiper>
@@ -86,6 +76,7 @@
 </template>
 
 <script>
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -95,9 +86,9 @@
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
-				avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
 				openID: '',
-				tag: 0
+				tag: 0,
+				myswiper: []
 			}
 		},
 		filters: {
@@ -110,12 +101,30 @@
 				}
 			}
 		},
-
+		computed: {
+			...mapState('m_my', ['token'])
+		},
+		created() {
+			this.openID = uni.getStorageSync('openid')
+		},
 		onLoad() {
 			this.userinfo = uni.getStorageSync('user')
 			this.tag = 1
+			this.avatarUrl = uni.getStorageSync('login').avatarUrl
+			this.getSwiper()
 		},
 		methods: {
+			...mapMutations('m_my', ['getToken']),
+			/**
+			 * @param {Object} 获取轮播图
+			 */
+			async getSwiper() {
+				const data = await uni.$http.post('/my/swiper')
+				console.log(data);
+				if (data.statusCode == 200) {
+					this.myswiper = data.data.data
+				}
+			},
 			onChooseAvatar(e) {
 				console.log(1111);
 				this.avatarUrl = e.detail.avatarUrl
@@ -128,41 +137,40 @@
 					url: '../home/home'
 				})
 			},
-			login() {
+			async login() {
+				/**
+				 * 前台登录获取token
+				 */
 				let that = this
 				wx.getUserProfile({
 					desc: '用于用户登录',
 					success: res => {
 						uni.setStorageSync('user', res)
 						that.userinfo = res
+						uni.login({
+							provider: "weixin",
+							success: async function(res) {
+								const data = await uni.$http.post('/my/loginid', {
+									code: res.code
+								})
+								if (data.data.code === 20000) {
+									uni.setStorageSync('openid', JSON.parse(data.data.data)
+										.openid)
+									let { data: resd } = await uni.$http.post(
+										'/my/login', {
+											openid: JSON.parse(data.data.data)
+												.openid
+										})
+									that.openID = JSON.parse(data.data.data).openid
+									uni.setStorageSync('token', resd.data)
+								}
+							},
+						});
 					},
 					fail() {
 						return uni.$showMsg('您取消了登录授权')
 					}
 				})
-				uni.login({
-					provider: "weixin",
-					success: function(res) {
-						let appid = "wxc2b95f13ebf94d9e";
-						let secret = "e3eba071e51b37c5f5006f463d0446dc";
-						let url =
-							"https://api.weixin.qq.com/sns/jscode2session?appid=" +
-							appid +
-							"&secret=" +
-							secret +
-							"&js_code=" +
-							res.code +
-							"&grant_type=authorization_code";
-						uni.request({
-							url: url, // 请求路径
-							success: (r) => {
-								console.log("r", r);
-								console.info("用户的openId", r.data.openid);
-								uni.setStorageSync('openid', r.data.openid)
-							},
-						});
-					},
-				});
 			},
 			orderclass(index) {
 				if (index == 1) {
@@ -178,7 +186,18 @@
 					uni.removeStorageSync('user')
 					uni.removeStorageSync('dizhi')
 					uni.removeStorageSync('shop')
+					uni.removeStorageSync('token')
+					this.openID = ''
 					this.userinfo = ''
+				} else if (index == 3) {
+					console.log('接单了');
+					uni.redirectTo({
+						url: '../../subpkg/kd_jiedan/kd_jiedan'
+					})
+				} else if (index == 4) {
+					uni.redirectTo({
+						url: '../../subpkg/kd_fabu/kd_fabu'
+					})
 				}
 			},
 			gaincode() {
@@ -186,11 +205,6 @@
 					url: '../../subpkg/soundcode/soundcode'
 				})
 			},
-			vip() {
-				// uni.redirectTo({
-				// 	url: '.'
-				// })
-			}
 		}
 	}
 </script>
@@ -294,7 +308,7 @@
 
 		//轮播图
 		.swiper_lun {
-			height: 22vh;
+			height: 20vh;
 			width: 100vw;
 
 			img {

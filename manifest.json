@@ -71,7 +71,11 @@
 			"startLocationUpdateBackground",
 			"chooseAddress",
 			"chooseLocation"
-		]
+		],
+		"optimization": {
+			"subPackages": true
+		},
+		"lazyCodeLoading": "requiredComponents"
 	},
 	"vueVersion": "2"
 }

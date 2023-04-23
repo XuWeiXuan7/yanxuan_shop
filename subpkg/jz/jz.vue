@@ -1,7 +1,7 @@
 <template>
 	<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
 		<view class="jz">
-			<view class="jz-cont" v-for="(item,index) in jzmessage" :key="index">
+			<view class="jz-cont" v-for="(item,index) in jzmessage" :key="index" @click="skip(item.id)">
 				<view class="title">
 					<text>{{item.title}}</text>
 					<text>{{item.price}}</text>
@@ -19,10 +19,12 @@
 </template>
 
 <script>
+	// import
 	export default {
 		data() {
 			return {
-				jzmessage: []
+				jzmessage: [],
+				timer: null
 			}
 		},
 		onShow() {
@@ -32,8 +34,15 @@
 			async getWorkCont() {
 				const { data: res } = await uni.$http.post('/jz/jianzhi')
 				this.jzmessage = res.status
+				console.log(this.jzmessage, '兼职信息');
+			},
+			skip(id) {
+				uni.redirectTo({
+					url: '../jz_details/jz_details?id=' + id
+				})
 			}
-		}
+		},
+		onUnload() {}
 	}
 </script>
 

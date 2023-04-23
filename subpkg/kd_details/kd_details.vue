@@ -23,7 +23,7 @@
 				</uni-forms-item>
 			</uni-forms>
 			<view style="text-align: center;">
-				<button size="mini" type="primary" @click="submit('valiForm')">发布</button>
+				<button size="mini" type="primary" @click="submit('valiForm')" :disabled="fabubtn">发布</button>
 			</view>
 		</view>
 		</uni-section>
@@ -42,6 +42,7 @@
 					phone: '15555555555',
 					category: '中通'
 				},
+				fabubtn: false,
 				value: 2,
 				range: [
 					{ value: 0, text: "顺丰" },
@@ -117,6 +118,7 @@
 				console.log(e);
 			},
 			submit(ref) {
+				this.fabubtn = true
 				this.$refs[ref].validate().then(async (res) => {
 					let openid = uni.getStorageSync('openid')
 					const { data: data } = await uni.$http.post('/jz/order', {
@@ -144,6 +146,13 @@
 							title: `发布失败`
 						})
 					}
+					new Promise((resolve, reject) => {
+						setTimeout(() => {
+							resolve()
+						}, 2000)
+					}).then(() => {
+						this.fabubtn = false
+					})
 
 				}).catch(err => {
 					uni.showToast({

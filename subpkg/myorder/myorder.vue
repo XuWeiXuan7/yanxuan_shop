@@ -17,8 +17,10 @@
 							<text>x{{item1.num}}</text>
 						</view>
 						<text>￥{{item1.price}}</text>
+
 					</view>
 					<view class="dingdan-bot">
+						<text v-if="item[0]">{{item[0].time | fromDate}}</text>
 						<text>合计:￥{{item | totalprice}}</text>
 					</view>
 				</view>
@@ -28,6 +30,7 @@
 </template>
 
 <script>
+	import { formatDate } from '@/uni_modules/uni-dateformat/components/uni-dateformat/date-format.js'
 	export default {
 		data() {
 			return {
@@ -42,11 +45,14 @@
 					price += item.price * item.num
 				})
 				return price
+			},
+			fromDate(data) {
+				return formatDate(data)
 			}
 		},
 
-		async onShow() {
-			await this.mydingdan()
+		created() {
+			this.mydingdan()
 			console.log(this.dingdan.length);
 		},
 		methods: {
@@ -64,8 +70,12 @@
 					})
 					// this.dingdan = res.status
 					this.tag = 1
-					res.status.forEach((item) => {
-						this.dingdan.push(JSON.parse(item.commodity))
+					res.status.forEach((item, index) => {
+						let data = JSON.parse(item.commodity)
+						data[0].time = item.time
+						console.log(data);
+						this.dingdan.push(data)
+						// this.dingdan[index]['time'] = item.time
 					})
 				} catch (e) {
 					console.log(e);
@@ -146,6 +156,8 @@
 
 			.dingdan-bot {
 				padding: 50rpx;
+				display: flex;
+				justify-content: space-between;
 				text-align: right;
 			}
 		}

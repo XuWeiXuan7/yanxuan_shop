@@ -38,26 +38,26 @@
 		"pages": [{
 				"path": "kd/kd",
 				"style": {
-					"onReachBottomDistance": 150,
-					"enablePullDownRefresh": true,
-					"backgroundColor": "#f8f8f8",
-					"navigationBarTitleText": "快递代拿"
+					"navigationStyle": "custom"
 
 				}
 			},
 			{
-				"path": "nc/nc"
+				"path": "nc/nc",
+				"style": {
+					"navigationBarTitleText": "严选奶茶店"
+				}
 			},
 			{
 				"path": "jx/jx",
 				"style": {
-					"navigationBarTitleText": "驾校"
+					"navigationBarTitleText": "严选驾校"
 				}
 
 			}, {
 				"path": "jz/jz",
 				"style": {
-					"navigationBarTitleText": "",
+					"navigationBarTitleText": "严选兼职",
 					"enablePullDownRefresh": false
 				}
 
@@ -97,7 +97,42 @@
 			}, {
 				"path": "kd_details/kd_details",
 				"style": {
-					"navigationBarTitleText": "快递代拿信息",
+					"navigationBarTitleText": "快递代拿发布",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "kd_jiedan/kd_jiedan",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "kd_fabu/kd_fabu",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+
+				}
+
+			}, {
+				"path": "jx_details/jx_details",
+				"style": {
+					"enablePullDownRefresh": false,
+					"navigationStyle": "custom"
+				}
+			}, {
+				"path": "jz_details/jz_details",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "map/map",
+				"style": {
+					"navigationBarTitleText": "",
 					"enablePullDownRefresh": false
 				}
 
@@ -112,12 +147,5 @@
 		"app-plus": {
 			"background": "#efeff4"
 		}
-	},
-	"easycom": {
-		"autoscan": true,
-		"custom": {
-			"fui-(.*)": "firstui-uni/firstui/fui-$1/fui-$1.vue"
-		}
 	}
-
 }

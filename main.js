@@ -5,7 +5,7 @@ import store from '@/store/index.js'
 Vue.config.productionTip = false
 import { $http } from '@escook/request-miniprogram'
 uni.$http = $http
-$http.baseUrl = 'http://127.0.0.1:7775'
+$http.baseUrl = 'http://192.168.9.12:7775'
 App.mpType = 'app'
 $http.beforeRequest = function(options) {
 	uni.showLoading({
@@ -13,18 +13,26 @@ $http.beforeRequest = function(options) {
 	})
 
 	// console.log(store) 
-
+	console.log(options.url, '获取接口信息');
 	// 判断当前请求的是否为有权限的接口
-	if (options.url.indexOf('/my/') !== -1) {
+	if (options.url.indexOf('/my') === -1) {
+		console.log(store, '需要权限');
 		options.header = {
-			Authorization: store.state.m_user.token
+			Authorization: uni.getStorageSync('token')
 		}
-		console.log(store.state.m_user.token, '6666666');
+		console.log('权限', store.state.m_my.token, '6666666');
 	}
 }
 $http.afterRequest = function() {
 	uni.hideLoading()
 }
+import io from '@hyoga/uni-socket.io'
+const socket = io('http://127.0.0.1:7776', {
+	query: {},
+	transports: ['websocket', 'polling'],
+	timeout: 5000
+})
+Vue.prototype.$socket = socket
 uni.$showMsg = function(title = '数据请求失败111！', duration = 1500) {
 	uni.showToast({
 		title,

@@ -2,7 +2,8 @@ export default {
 	namespaced: true,
 
 	state: () => ({
-		my_address: JSON.parse(uni.getStorageSync('address') || '{}')
+		my_address: JSON.parse(uni.getStorageSync('address') || '{}'),
+		token: ''
 	}),
 
 	mutations: {
@@ -12,6 +13,9 @@ export default {
 		},
 		savelocal(state) {
 			uni.setStorageSync('dizhi', JSON.stringify(state.my_address))
+		},
+		getToken(state, token) {
+			state.token = token
 		}
 	},
 

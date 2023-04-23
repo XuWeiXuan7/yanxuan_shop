@@ -1,8 +1,8 @@
 <template>
 	<view class="jx">
-		<view class="jx-cont" v-for="(item,index) in jxmessage" :key="index">
+		<view class="jx-cont" @click="navgetToDetails(item.tabName)" v-for="(item,index) in jxmessage" :key="index">
 			<view class="jx-title">
-				<text>热门<text>驾校:{{item.name}}</text></text>
+				<text>热门<text>驾校:{{item.tabName}}</text></text>
 				<text>累计已招收学员<text>{{item.xueyuan}}</text>人</text>
 			</view>
 			<img :src="item.img" alt="">
@@ -30,6 +30,15 @@
 			async getCartCont() {
 				const { data: res } = await uni.$http.post('/jx/jiaxiao')
 				this.jxmessage = res.status
+				if (res.message == '身份认证失败')
+					uni.reLaunch({
+						url: '../../pages/my/my'
+					})
+			},
+			navgetToDetails(tabName) {
+				uni.redirectTo({
+					url: '../jx_details/jx_details?carname=' + tabName
+				})
 			}
 		}
 	}

@@ -7,19 +7,9 @@
 			<view class="nc_swiper">
 				<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular
 					indicator-active-color="red" :current="0">
-					<swiper-item>
+					<swiper-item v-for="(item,index) in ncswiper" :key="index">
 						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/09/lun3_20230109065711A001.jpg" alt="">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/10/lun1_20230110044420A001.jpg" alt="">
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="swiper-item">
-							<img src="../../pages/home/image/upload/2023/01/10/lun4_20230110041834A001.jpg" alt="">
+							<img :src="item.img" alt="">
 						</view>
 					</swiper-item>
 				</swiper>
@@ -125,6 +115,7 @@
 	export default {
 		data() {
 			return {
+				ncswiper: [],
 				options: [{
 					icon: 'shop',
 					text: '首页',
@@ -188,6 +179,7 @@
 		async mounted() {
 			await this.getNcInfo()
 			await this.getNcTab()
+			this.getswiper()
 			let tabnum = this.naicha.homeTab.length
 			this.naicha.homeInfo.forEach((item, index) => {
 				for (let i = 0; i < item.length; i++) {
@@ -239,6 +231,15 @@
 		},
 
 		methods: {
+			/**
+			 * @param {Object} 获取轮播图图片
+			 */
+			async getswiper() {
+				const { data: res } = await uni.$http.post('/api/ncswiper')
+				console.log(res);
+				if (res.code === 20000)
+					this.ncswiper = res.data
+			},
 			onClick(e) {
 				console.log(e);
 

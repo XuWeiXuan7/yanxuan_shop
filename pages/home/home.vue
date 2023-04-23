@@ -7,7 +7,7 @@
 		<view class="home-content">
 			<view class="home-header">
 				<view class="home-headimg">
-					<img src="../home/image/logo.png" alt="">
+					<img src="../home/images/logo.png" alt="">
 				</view>
 				<view class="home-headtitle">
 					<h4>严选便利店</h4>
@@ -16,23 +16,23 @@
 			</view>
 			<view class="home-group">
 				<view class="home-henfu">
-					<Marquee></Marquee>
+					<uni-notice-bar show-icon scrollable text="更多活动敬请期待,加盟商联系客服电话,公司给予大力扶持" />
 				</view>
 				<view class="home-group-item">
-					<navigator url="../../subpkg/kd/kd" class="item" hover-class="none">
-						<img src="../home/image/kd.jpg" alt="">
+					<!-- <navigator url="../../subpkg/kd/kd" class="item" hover-class="none">
+						<img src="../home/images/kd.jpg" alt="">
 						<text>快递代取</text>
-					</navigator>
+					</navigator> -->
 					<navigator url="../../subpkg/nc/nc" class="item" hover-class="none">
-						<img src="../home/image/nc.jpg" alt="">
+						<img src="../home/images/nc.jpg" alt="">
 						<text>奶茶</text>
 					</navigator>
 					<navigator url="../../subpkg/jx/jx" class="item" hover-class="none">
-						<img src="../home/image/jx.jpg" alt="">
+						<img src="../home/images/jx.jpg" alt="">
 						<text>驾校</text>
 					</navigator>
 					<navigator url="../../subpkg/jz/jz" class="item" hover-class="none">
-						<img src="../home/image/jz.jpg" alt="">
+						<img src="../home/images/jz.jpg" alt="">
 						<text>兼职</text>
 					</navigator>
 				</view>
@@ -309,6 +309,7 @@
 			//结算
 			async jiesuan() {
 				try {
+					this.btnerr = true
 					let ar = JSON.parse(uni.getStorageSync('dizhi'))
 					if (ar != null) {
 						let fk = await uni.showModal({
@@ -335,6 +336,7 @@
 							console.log(res);
 							if (res.status == 0) {
 								setTimeout(() => {
+									this.$socket.emit('payShop', '购买商品啦...快派送吧')
 									uni.hideLoading()
 									uni.$showMsg('付款成功', 2000)
 									this.removeStorage()
