@@ -18,7 +18,7 @@ export default {
 			} else {
 				state.goods[findIndex].num = goods_list.num
 			}
-			console.log('1999999999999999')
+			console.log('19999999999999991213123')
 			console.log(state.goods, '清空测试数据12312312');
 			console.log(state.goods, '清空测试数据12312312');
 			console.log(state.goods, '清空测试数据12312312');
