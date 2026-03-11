@@ -18,7 +18,7 @@ export default {
 			} else {
 				state.goods[findIndex].num = goods_list.num
 			}
-			console.log(state.goods, '清空测试数据123123123');
+			console.log(state.goods, '清空测试数据12312312');
 			this.commit('m_home/savelocal')
 		},
 		//减商品
