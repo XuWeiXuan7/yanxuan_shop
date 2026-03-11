@@ -38,7 +38,14 @@
 		"pages": [{
 				"path": "kd/kd",
 				"style": {
+<<<<<<< HEAD
 					"navigationStyle": "custom"
+=======
+					"onReachBottomDistance": 150,
+					"enablePullDownRefresh": true,
+					"backgroundColor": "#f8f8f8",
+					"navigationBarTitleText": "快递代拿111111111111111"
+>>>>>>> list
 
 				}
 			},
