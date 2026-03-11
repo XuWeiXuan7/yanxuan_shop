@@ -24,6 +24,9 @@ export default {
 			console.log(state.goods, '清空测试数据12312312');
 			console.log(state.goods, '清空测试数据12312312');
 			console.log(state.goods, '清空测试数据12312312');
+			console.log(state.goods, '清空测试数据12312312');
+			console.log(state.goods, '清空测试数据12312312');
+			console.log(state.goods, '清空测试数据12312312');
 			this.commit('m_home/savelocal')
 		},
 		//减商品
