@@ -6,11 +6,11 @@ export default {
 	}),
 
 	mutations: {
-		savelocal(state) {
+		savelocal (state) {
 			uni.setStorageSync('shop_list', JSON.stringify(state.goods))
 		},
 		//加商品
-		addToCart(state, goods_list) {
+		addToCart (state, goods_list) {
 			const findIndex = state.goods.findIndex(x => x.title === goods_list.title)
 			console.log(findIndex);
 			if (findIndex == -1) {
@@ -18,11 +18,11 @@ export default {
 			} else {
 				state.goods[findIndex].num = goods_list.num
 			}
-			console.log(state.goods, '清空测试数据');
+			console.log(state.goods, '清空测试数据1111');
 			this.commit('m_home/savelocal')
 		},
 		//减商品
-		jianToCart(state, goods_list) {
+		jianToCart (state, goods_list) {
 			const findIndex = state.goods.findIndex(x => x.title === goods_list.title)
 			state.goods[findIndex].num = goods_list.num
 			if (state.goods[findIndex].num == 0) {
