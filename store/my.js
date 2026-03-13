@@ -17,7 +17,7 @@ export default {
 		getToken (state, token) {
 			state.token = token
 		}
-		console.log(123);
+		console.log(1234561231231);
 	},
 
 	getters: {
