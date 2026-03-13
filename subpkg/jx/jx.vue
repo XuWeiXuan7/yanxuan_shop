@@ -1,14 +1,14 @@
 <template>
 	<view class="jx">
-		<view class="jx-cont" @click="navgetToDetails(item.tabName)" v-for="(item,index) in jxmessage" :key="index">
+		<view class="jx-cont" @click="navgetToDetails(item.tabName)" v-for="(item, index) in jxmessage" :key="index">
 			<view class="jx-title">
-				<text>热门<text>驾校:{{item.tabName}}</text></text>
-				<text>累计已招收学员<text>{{item.xueyuan}}</text>人</text>
+				<text>热门<text>驾校:{{ item.tabName }}</text></text>
+				<text>累计已招收学员<text>{{ item.xueyuan }}</text>人</text>
 			</view>
 			<img :src="item.img" alt="">
 			<view class="jx-titlebt">
 				<text>专业班手动波</text>
-				<text>￥{{item.price}}.00</text>
+				<text>￥{{ item.price }}.00</text>
 			</view>
 		</view>
 	</view>
@@ -16,26 +16,27 @@
 
 <script>
 	export default {
-		data() {
+		data () {
 			return {
 				jxmessage: [
 
 				]
 			}
 		},
-		onShow() {
+		onShow () {
 			this.getCartCont()
 		},
 		methods: {
-			async getCartCont() {
+			async getCartCont () {
 				const { data: res } = await uni.$http.post('/jx/jiaxiao')
 				this.jxmessage = res.status
 				if (res.message == '身份认证失败')
 					uni.reLaunch({
 						url: '../../pages/my/my'
 					})
+
 			},
-			navgetToDetails(tabName) {
+			navgetToDetails (tabName) {
 				uni.redirectTo({
 					url: '../jx_details/jx_details?carname=' + tabName
 				})

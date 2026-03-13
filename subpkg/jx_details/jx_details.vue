@@ -15,11 +15,11 @@
 			<uni-notice-bar show-icon scrollable text="驾校火热招生中,收费透明,车接车送,教练技术好认真负责.我们做的是服务,一次服务终身朋友" />
 		</view>
 		<jx-cont :categroy="category" />
-	</view>
+	</view> 
 </template>
 <script>
-	export default {
-		components: {},
+	export default { 
+	     	components: {},
 		data() {
 			return {
 				info: [],
