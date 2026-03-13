@@ -22,7 +22,7 @@ export default {
             console.log('199999999999999912312123129991231231')
             console.log('3月13测试合并开始')
             console.log('3月13测试合并开始')
-            console.log('3月13测试合并开始111111')
+            console.log('3月13测试合并开始1111112222')
 
         },
         //减商品
