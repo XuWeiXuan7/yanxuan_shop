@@ -20,7 +20,7 @@ export default {
             console.log(state.goods, '清空测试数据123123121111222222');
             this.commit('m_home/savelocal')
             console.log('199999999999999912312123129991231231')
-            console.log('3月13测试合并12112311123111')
+            console.log('3月13测试合并结束')
 
         },
         //减商品
