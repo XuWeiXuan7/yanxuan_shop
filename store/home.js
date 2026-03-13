@@ -21,6 +21,7 @@ export default {
             this.commit('m_home/savelocal')
             console.log('199999999999999912312123129991231231')
             console.log('3月13测试合并开始')
+            console.log('3月13测试合并开始')
 
         },
         //减商品
