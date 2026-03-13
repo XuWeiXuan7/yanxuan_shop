@@ -7,16 +7,17 @@ export default {
 	}),
 
 	mutations: {
-		ad_address(state, address) {
+		ad_address (state, address) {
 			state.my_address = address
 			this.commit('m_my/savelocal')
 		},
-		savelocal(state) {
+		savelocal (state) {
 			uni.setStorageSync('dizhi', JSON.stringify(state.my_address))
 		},
-		getToken(state, token) {
+		getToken (state, token) {
 			state.token = token
 		}
+		console.log(123);
 	},
 
 	getters: {
