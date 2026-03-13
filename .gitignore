@@ -1,2 +1,7 @@
 /node_modules
 /unpackage/dist
+.idea/prettier.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/.gitignore
+.idea/yanxuan_shop.iml
