@@ -17,7 +17,6 @@ export default {
             } else {
                 state.goods[findIndex].num = goods_list.num
             }
-            console.log(state.goods, '清空测试数据123123121111222222');
             this.commit('m_home/savelocal')
 
         },
