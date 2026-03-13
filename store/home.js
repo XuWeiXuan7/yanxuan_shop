@@ -20,7 +20,7 @@ export default {
             console.log(state.goods, '清空测试数据123123121111222222');
             this.commit('m_home/savelocal')
             console.log('199999999999999912312123129991231231')
-
+            console.log('3月13测试合并')
         },
         //减商品
         jianToCart(state, goods_list) {
